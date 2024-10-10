@@ -162,18 +162,18 @@
         const getCores = () => {
             return navigator.hardwareConcurrency || 'Not supported';
         };
-        document.getElementById('cpuCores').textContent = `${getCores()} Cores`;
+        document.getElementById('cpuCores').textContent = getCores();
 
         // Performance Metrics
-        const performanceTiming = window.performance.timing;
-        const loadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
-        const timeSinceLoad = Date.now() - performanceTiming.loadEventEnd;
+        let pageLoadStartTime = performance.now();
+        window.addEventListener('load', () => {
+            let pageLoadTime = performance.now() - pageLoadStartTime;
+            document.getElementById('pageLoadTime').textContent = `${pageLoadTime.toFixed(2)} ms`;
+            document.getElementById('timeSincePageLoad').textContent = `${(performance.now() - pageLoadStartTime).toFixed(2)} ms`;
+        });
 
-        document.getElementById('pageLoadTime').textContent = `${(loadTime / 1000).toFixed(2)} seconds`;
-        document.getElementById('timeSincePageLoad').textContent = `${(timeSinceLoad / 1000).toFixed(2)} seconds`;
-
-        // Fetching IP Address and additional details
-        fetch('http://ip-api.com/json/')
+        // IP Address and SIM Operator Details
+        fetch('https://ip-api.com/json/')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ipAddress').textContent = data.query || 'N/A';
