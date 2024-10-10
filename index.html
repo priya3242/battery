@@ -172,31 +172,27 @@
             document.getElementById('timeSincePageLoad').textContent = `${(performance.now() - pageLoadStartTime).toFixed(2)} ms`;
         });
 
-        // IP Address and SIM Operator Details
-        fetch('https://ip-api.com/json/')
+        // Fetch IP Address
+        fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('ipAddress').textContent = data.query || 'N/A';
+                const userIp = data.ip;
+                document.getElementById('ipAddress').textContent = userIp;
+
+                // Fetch IP details using the fetched IP address
+                return fetch(`https://ip-api.com/json/${userIp}`);
+            })
+            .then(response => response.json())
+            .then(data => {
                 document.getElementById('simOperator').textContent = data.isp || 'N/A';
-
-                // Extracting required details
-                const country = data.country || 'N/A';
-                const region = data.regionName || 'N/A';
-                const ispName = data.isp || 'N/A';
-                const isMobile = data.mobile ? 'Yes' : 'No';
-                const currency = data.currency || 'N/A';
-
-                // Displaying extracted details
-                document.getElementById('country').textContent = country;
-                document.getElementById('region').textContent = region;
-                document.getElementById('ispName').textContent = ispName;
-                document.getElementById('isMobile').textContent = isMobile;
-                document.getElementById('currency').textContent = currency;
+                document.getElementById('country').textContent = data.country || 'N/A';
+                document.getElementById('region').textContent = data.regionName || 'N/A';
+                document.getElementById('ispName').textContent = data.org || 'N/A';
+                document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
+                document.getElementById('currency').textContent = data.currency || 'N/A';
             })
             .catch(error => {
-                document.getElementById('ipAddress').textContent = 'Unable to fetch IP';
-                document.getElementById('simOperator').textContent = 'Unable to fetch SIM Operator';
-                console.error('Error fetching IP:', error);
+                console.error('Error fetching IP details:', error);
             });
     </script>
 </body>
