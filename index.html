@@ -76,18 +76,11 @@
         <p><strong>Online Status:</strong> <span id="onlineStatus"></span></p>
 
         <h2>2. Device Information</h2>
-        <p><strong>Device Model:</strong> <span id="deviceModel">Fetching...</span></p>
-        <p><strong>Manufacturer:</strong> <span id="manufacturer">Fetching...</span></p>
-        <p><strong>Operating System:</strong> <span id="os"></span></p>
-        <p><strong>Device Type:</strong> <span id="deviceType">Fetching...</span></p>
-        <p><strong>SIM Operator:</strong> <span id="simOperator">Fetching...</span></p>
-        <p><strong>IP Address:</strong> <span id="ipAddress">Fetching...</span></p>
         <p><strong>Screen Width:</strong> <span id="screenWidth"></span></p>
         <p><strong>Screen Height:</strong> <span id="screenHeight"></span></p>
         <p><strong>Available Width:</strong> <span id="availableWidth"></span></p>
         <p><strong>Available Height:</strong> <span id="availableHeight"></span></p>
         <p><strong>Screen Orientation:</strong> <span id="screenOrientation"></span></p>
-        <p><strong>Touchscreen:</strong> <span id="touchscreen"></span></p>
 
         <h2>3. Battery Information</h2>
         <p><strong>Charging:</strong> <span id="charging">Checking...</span></p>
@@ -108,6 +101,15 @@
         <h2>7. Performance Metrics</h2>
         <p><strong>Page Load Time:</strong> <span id="pageLoadTime">Fetching...</span></p>
         <p><strong>Time Since Page Load:</strong> <span id="timeSincePageLoad">Fetching...</span></p>
+
+        <h2>8. IP Details</h2>
+        <p><strong>IP Address:</strong> <span id="ipAddress">Fetching...</span></p>
+        <p><strong>SIM Operator:</strong> <span id="simOperator">Fetching...</span></p>
+        <p><strong>Country:</strong> <span id="country">Fetching...</span></p>
+        <p><strong>Region:</strong> <span id="region">Fetching...</span></p>
+        <p><strong>ISP Name:</strong> <span id="ispName">Fetching...</span></p>
+        <p><strong>Mobile Status:</strong> <span id="isMobile">Fetching...</span></p>
+        <p><strong>Currency:</strong> <span id="currency">Fetching...</span></p>
     </div>
 
     <script>
@@ -119,43 +121,11 @@
         document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
 
         // Device Information
-        const deviceModel = "Unknown"; // This information cannot be reliably fetched from the browser
-        const manufacturer = "Unknown"; // This information cannot be reliably fetched from the browser
-        const deviceType = /Mobi/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
-        const simOperator = /Mobi/i.test(navigator.userAgent) ? "Unknown SIM Operator" : "N/A"; // Placeholder for SIM operator
-
-        const screenWidth = screen.width;
-        const screenHeight = screen.height;
-        const availableWidth = window.screen.availWidth;
-        const availableHeight = window.screen.availHeight;
-        const screenOrientation = screen.orientation ? screen.orientation.type : 'Not supported';
-        const isTouchscreen = 'ontouchstart' in window ? 'Yes' : 'No';
-
-        // Display device information
-        document.getElementById("deviceModel").textContent = deviceModel;
-        document.getElementById("manufacturer").textContent = manufacturer;
-        document.getElementById("os").textContent = navigator.platform;
-        document.getElementById("deviceType").textContent = deviceType;
-        document.getElementById("simOperator").textContent = simOperator;
-        document.getElementById("screenWidth").textContent = `${screenWidth}px`;
-        document.getElementById("screenHeight").textContent = `${screenHeight}px`;
-        document.getElementById("availableWidth").textContent = `${availableWidth}px`;
-        document.getElementById("availableHeight").textContent = `${availableHeight}px`;
-        document.getElementById("screenOrientation").textContent = screenOrientation;
-        document.getElementById("touchscreen").textContent = isTouchscreen;
-
-        // Fetching IP Address and additional details
-        fetch('http://ip-api.com/json/')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('ipAddress').textContent = data.query || 'N/A';
-                document.getElementById('simOperator').textContent = data.isp || 'N/A';
-            })
-            .catch(error => {
-                document.getElementById('ipAddress').textContent = 'Unable to fetch IP';
-                document.getElementById('simOperator').textContent = 'Unable to fetch SIM Operator';
-                console.error('Error fetching IP:', error);
-            });
+        document.getElementById('screenWidth').textContent = `${screen.width} px`;
+        document.getElementById('screenHeight').textContent = `${screen.height} px`;
+        document.getElementById('availableWidth').textContent = `${window.screen.availWidth} px`;
+        document.getElementById('availableHeight').textContent = `${window.screen.availHeight} px`;
+        document.getElementById('screenOrientation').textContent = screen.orientation ? screen.orientation.type : 'Not supported';
 
         // Battery Information
         if ('getBattery' in navigator) {
@@ -182,18 +152,52 @@
         }
 
         // Device Memory
-        navigator.deviceMemory ? document.getElementById('deviceMemory').textContent = `${navigator.deviceMemory} GB` : document.getElementById('deviceMemory').textContent = 'Not supported';
+        if (navigator.deviceMemory) {
+            document.getElementById('deviceMemory').textContent = `${navigator.deviceMemory} GB`;
+        } else {
+            document.getElementById('deviceMemory').textContent = 'Device Memory API not supported.';
+        }
 
-        // CPU Cores
-        navigator.hardwareConcurrency ? document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency : document.getElementById('cpuCores').textContent = 'Not supported';
+        // CPU Cores (Approximation)
+        const getCores = () => {
+            return navigator.hardwareConcurrency || 'Not supported';
+        };
+        document.getElementById('cpuCores').textContent = `${getCores()} Cores`;
 
         // Performance Metrics
-        const performanceTiming = performance.timing;
+        const performanceTiming = window.performance.timing;
         const loadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
-        const timeSinceLoad = Date.now() - performanceTiming.navigationStart;
+        const timeSinceLoad = Date.now() - performanceTiming.loadEventEnd;
 
         document.getElementById('pageLoadTime').textContent = `${(loadTime / 1000).toFixed(2)} seconds`;
         document.getElementById('timeSincePageLoad').textContent = `${(timeSinceLoad / 1000).toFixed(2)} seconds`;
+
+        // Fetching IP Address and additional details
+        fetch('http://ip-api.com/json/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ipAddress').textContent = data.query || 'N/A';
+                document.getElementById('simOperator').textContent = data.isp || 'N/A';
+
+                // Extracting required details
+                const country = data.country || 'N/A';
+                const region = data.regionName || 'N/A';
+                const ispName = data.isp || 'N/A';
+                const isMobile = data.mobile ? 'Yes' : 'No';
+                const currency = data.currency || 'N/A';
+
+                // Displaying extracted details
+                document.getElementById('country').textContent = country;
+                document.getElementById('region').textContent = region;
+                document.getElementById('ispName').textContent = ispName;
+                document.getElementById('isMobile').textContent = isMobile;
+                document.getElementById('currency').textContent = currency;
+            })
+            .catch(error => {
+                document.getElementById('ipAddress').textContent = 'Unable to fetch IP';
+                document.getElementById('simOperator').textContent = 'Unable to fetch SIM Operator';
+                console.error('Error fetching IP:', error);
+            });
     </script>
 </body>
 </html>
