@@ -110,6 +110,11 @@
         <p><strong>ISP Name:</strong> <span id="ispName">Fetching...</span></p>
         <p><strong>Mobile Status:</strong> <span id="isMobile">Fetching...</span></p>
         <p><strong>Currency:</strong> <span id="currency">Fetching...</span></p>
+
+        <h2>9. Motion Sensor Data</h2>
+        <p><strong>Acceleration (x, y, z):</strong> <span id="acceleration">Fetching...</span></p>
+        <p><strong>Rotation (alpha, beta, gamma):</strong> <span id="rotation">Fetching...</span></p>
+        <p><strong>Device Name:</strong> <span id="deviceName">Fetching...</span></p>
     </div>
 
     <script>
@@ -165,37 +170,51 @@
         document.getElementById('cpuCores').textContent = getCores();
 
         // Performance Metrics
-        let pageLoadStartTime = performance.now();
         window.addEventListener('load', () => {
-            let pageLoadTime = performance.now() - pageLoadStartTime;
-            document.getElementById('pageLoadTime').textContent = `${pageLoadTime.toFixed(2)} ms`;
-            document.getElementById('timeSincePageLoad').textContent = `${(performance.now() - pageLoadStartTime).toFixed(2)} ms`;
+            const performanceData = performance.timing;
+            const pageLoadTime = performanceData.loadEventEnd - performanceData.navigationStart;
+            document.getElementById('pageLoadTime').textContent = `${pageLoadTime} ms`;
+            document.getElementById('timeSincePageLoad').textContent = `${Date.now() - performanceData.navigationStart} ms`;
         });
 
-        // Fetch IP Address
-       // Fetch IP Address
-fetch('https://api.ipify.org?format=json')
-    .then(response => response.json())
-    .then(data => {
-        const userIp = data.ip;
-        document.getElementById('ipAddress').textContent = userIp;
+        // Fetching IP details from a third-party API (reverted to old structure)
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ipAddress').textContent = data.ip || 'N/A';
+                document.getElementById('simOperator').textContent = data.org || 'N/A';
+                document.getElementById('country').textContent = data.country || 'N/A';
+                document.getElementById('region').textContent = data.region || 'N/A';
+                document.getElementById('ispName').textContent = data.isp || 'N/A';
+                document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
+                document.getElementById('currency').textContent = data.currency || 'N/A';
+            })
+            .catch(error => console.error('Error fetching IP details:', error));
 
-        // Fetch IP details using the fetched IP address from ipinfo.io
-        return fetch(`https://ipinfo.io/${userIp}/json`);
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('simOperator').textContent = data.org || 'N/A';
-        document.getElementById('country').textContent = data.country || 'N/A';
-        document.getElementById('region').textContent = data.region || 'N/A';
-        document.getElementById('ispName').textContent = data.hostname || 'N/A';
-        document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
-        document.getElementById('currency').textContent = data.currency || 'N/A'; // Note: This field may not be provided by ipinfo
-    })
-    .catch(error => {
-        console.error('Error fetching IP details:', error);
-    });
+        // Motion Sensor Data
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', (event) => {
+                const acceleration = event.accelerationIncludingGravity;
+                document.getElementById('acceleration').textContent = 
+                    `X: ${acceleration.x.toFixed(2)} m/s², Y: ${acceleration.y.toFixed(2)} m/s², Z: ${acceleration.z.toFixed(2)} m/s²`;
+            });
 
+            window.addEventListener('deviceorientation', (event) => {
+                document.getElementById('rotation').textContent = 
+                    `Alpha: ${event.alpha.toFixed(2)}°, Beta: ${event.beta.toFixed(2)}°, Gamma: ${event.gamma.toFixed(2)}°`;
+            });
+        } else {
+            document.getElementById('acceleration').textContent = 'Device Motion not supported.';
+            document.getElementById('rotation').textContent = 'Device Orientation not supported.';
+        }
+
+        // Function to fetch device name (using a third-party service or API)
+        function fetchDeviceName() {
+            const deviceName = navigator.userAgent; // Placeholder for demonstration
+            document.getElementById('deviceName').textContent = deviceName;
+        }
+
+        fetchDeviceName();
     </script>
 </body>
 </html>
