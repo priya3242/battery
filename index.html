@@ -173,27 +173,29 @@
         });
 
         // Fetch IP Address
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                const userIp = data.ip;
-                document.getElementById('ipAddress').textContent = userIp;
+       // Fetch IP Address
+fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+        const userIp = data.ip;
+        document.getElementById('ipAddress').textContent = userIp;
 
-                // Fetch IP details using the fetched IP address
-                return fetch(`https://ip-api.com/json/${userIp}`);
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('simOperator').textContent = data.isp || 'N/A';
-                document.getElementById('country').textContent = data.country || 'N/A';
-                document.getElementById('region').textContent = data.regionName || 'N/A';
-                document.getElementById('ispName').textContent = data.org || 'N/A';
-                document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
-                document.getElementById('currency').textContent = data.currency || 'N/A';
-            })
-            .catch(error => {
-                console.error('Error fetching IP details:', error);
-            });
+        // Fetch IP details using the fetched IP address from ipinfo.io
+        return fetch(`https://ipinfo.io/${userIp}/json`);
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('simOperator').textContent = data.org || 'N/A';
+        document.getElementById('country').textContent = data.country || 'N/A';
+        document.getElementById('region').textContent = data.region || 'N/A';
+        document.getElementById('ispName').textContent = data.hostname || 'N/A';
+        document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
+        document.getElementById('currency').textContent = data.currency || 'N/A'; // Note: This field may not be provided by ipinfo
+    })
+    .catch(error => {
+        console.error('Error fetching IP details:', error);
+    });
+
     </script>
 </body>
 </html>
