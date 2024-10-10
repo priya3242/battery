@@ -80,6 +80,8 @@
         <p><strong>Manufacturer:</strong> <span id="manufacturer">Fetching...</span></p>
         <p><strong>Operating System:</strong> <span id="os"></span></p>
         <p><strong>Device Type:</strong> <span id="deviceType">Fetching...</span></p>
+        <p><strong>SIM Operator:</strong> <span id="simOperator">Fetching...</span></p>
+        <p><strong>IP Address:</strong> <span id="ipAddress">Fetching...</span></p>
         <p><strong>Screen Width:</strong> <span id="screenWidth"></span></p>
         <p><strong>Screen Height:</strong> <span id="screenHeight"></span></p>
         <p><strong>Available Width:</strong> <span id="availableWidth"></span></p>
@@ -120,6 +122,7 @@
         const deviceModel = "Unknown"; // This information cannot be reliably fetched from the browser
         const manufacturer = "Unknown"; // This information cannot be reliably fetched from the browser
         const deviceType = /Mobi/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
+        const simOperator = /Mobi/i.test(navigator.userAgent) ? "Unknown SIM Operator" : "N/A"; // Placeholder for SIM operator
 
         const screenWidth = screen.width;
         const screenHeight = screen.height;
@@ -128,17 +131,29 @@
         const screenOrientation = screen.orientation ? screen.orientation.type : 'Not supported';
         const isTouchscreen = 'ontouchstart' in window ? 'Yes' : 'No';
 
-        // Display information
+        // Display device information
         document.getElementById("deviceModel").textContent = deviceModel;
         document.getElementById("manufacturer").textContent = manufacturer;
         document.getElementById("os").textContent = navigator.platform;
         document.getElementById("deviceType").textContent = deviceType;
+        document.getElementById("simOperator").textContent = simOperator;
         document.getElementById("screenWidth").textContent = `${screenWidth}px`;
         document.getElementById("screenHeight").textContent = `${screenHeight}px`;
         document.getElementById("availableWidth").textContent = `${availableWidth}px`;
         document.getElementById("availableHeight").textContent = `${availableHeight}px`;
         document.getElementById("screenOrientation").textContent = screenOrientation;
         document.getElementById("touchscreen").textContent = isTouchscreen;
+
+        // Fetching IP Address
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ipAddress').textContent = data.ip;
+            })
+            .catch(error => {
+                document.getElementById('ipAddress').textContent = 'Unable to fetch IP';
+                console.error('Error fetching IP:', error);
+            });
 
         // Battery Information
         if ('getBattery' in navigator) {
@@ -165,20 +180,13 @@
         }
 
         // Device Memory
-        if (navigator.deviceMemory) {
-            document.getElementById('deviceMemory').textContent = `${navigator.deviceMemory} GB`;
-        } else {
-            document.getElementById('deviceMemory').textContent = 'Device Memory API not supported.';
-        }
+        navigator.deviceMemory ? document.getElementById('deviceMemory').textContent = `${navigator.deviceMemory} GB` : document.getElementById('deviceMemory').textContent = 'Not supported';
 
-        // CPU Cores (Approximation)
-        const getCores = () => {
-            return navigator.hardwareConcurrency || 'Not supported';
-        };
-        document.getElementById('cpuCores').textContent = `${getCores()} Cores`;
+        // CPU Cores
+        navigator.hardwareConcurrency ? document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency : document.getElementById('cpuCores').textContent = 'Not supported';
 
         // Performance Metrics
-        const performanceTiming = window.performance.timing;
+        const performanceTiming = performance.timing;
         const loadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
         const timeSinceLoad = Date.now() - performanceTiming.navigationStart;
 
