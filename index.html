@@ -144,14 +144,16 @@
         document.getElementById("screenOrientation").textContent = screenOrientation;
         document.getElementById("touchscreen").textContent = isTouchscreen;
 
-        // Fetching IP Address
-        fetch('https://api.ipify.org?format=json')
+        // Fetching IP Address and additional details
+        fetch('http://ip-api.com/json/')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('ipAddress').textContent = data.ip;
+                document.getElementById('ipAddress').textContent = data.query || 'N/A';
+                document.getElementById('simOperator').textContent = data.isp || 'N/A';
             })
             .catch(error => {
                 document.getElementById('ipAddress').textContent = 'Unable to fetch IP';
+                document.getElementById('simOperator').textContent = 'Unable to fetch SIM Operator';
                 console.error('Error fetching IP:', error);
             });
 
