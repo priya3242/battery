@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser and Device Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e6f4f1; /* Light cyan background color */
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #008080; /* Teal text color */
+        }
+        h2 {
+            color: #007777; /* Slightly darker teal for subheadings */
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #d0e8e3; /* Light cyan header background color */
+        }
+
+        /* Responsive Styling */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            table {
+                width: 100%;
+            }
+            th, td {
+                display: block;
+                width: 100%;
+            }
+            th {
+                text-align: left;
+            }
+            td {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Browser and Device Information</h1>
+        
+        <h2>1. Browser Information</h2>
+        <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+        <p><strong>App Version:</strong> <span id="appVersion"></span></p>
+        <p><strong>Platform:</strong> <span id="platform"></span></p>
+        <p><strong>Language:</strong> <span id="language"></span></p>
+        <p><strong>Online Status:</strong> <span id="onlineStatus"></span></p>
+
+        <h2>2. Device Information</h2>
+        <p><strong>Device Model:</strong> <span id="deviceModel">Fetching...</span></p>
+        <p><strong>Manufacturer:</strong> <span id="manufacturer">Fetching...</span></p>
+        <p><strong>Operating System:</strong> <span id="os"></span></p>
+        <p><strong>Device Type:</strong> <span id="deviceType">Fetching...</span></p>
+        <p><strong>Screen Width:</strong> <span id="screenWidth"></span></p>
+        <p><strong>Screen Height:</strong> <span id="screenHeight"></span></p>
+        <p><strong>Available Width:</strong> <span id="availableWidth"></span></p>
+        <p><strong>Available Height:</strong> <span id="availableHeight"></span></p>
+        <p><strong>Screen Orientation:</strong> <span id="screenOrientation"></span></p>
+        <p><strong>Touchscreen:</strong> <span id="touchscreen"></span></p>
+
+        <h2>3. Battery Information</h2>
+        <p><strong>Charging:</strong> <span id="charging">Checking...</span></p>
+        <p><strong>Battery Level:</strong> <span id="batteryLevel">Checking...</span></p>
+        <p><strong>Discharging Time:</strong> <span id="dischargingTime">Checking...</span></p>
+
+        <h2>4. Network Information</h2>
+        <p><strong>Effective Network Type:</strong> <span id="networkType">Checking...</span></p>
+        <p><strong>Downlink Speed:</strong> <span id="downlinkSpeed">Checking...</span></p>
+        <p><strong>Round-trip Latency:</strong> <span id="latency">Checking...</span></p>
+
+        <h2>5. Device Memory</h2>
+        <p><strong>Approximate RAM:</strong> <span id="deviceMemory">Checking...</span></p>
+
+        <h2>6. CPU Cores</h2>
+        <p><strong>Number of CPU Cores:</strong> <span id="cpuCores">Checking...</span></p>
+
+        <h2>7. Performance Metrics</h2>
+        <p><strong>Page Load Time:</strong> <span id="pageLoadTime">Fetching...</span></p>
+        <p><strong>Time Since Page Load:</strong> <span id="timeSincePageLoad">Fetching...</span></p>
+    </div>
+
+    <script>
+        // Browser Information
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        document.getElementById('appVersion').textContent = navigator.appVersion;
+        document.getElementById('platform').textContent = navigator.platform;
+        document.getElementById('language').textContent = navigator.language || navigator.userLanguage;
+        document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
+
+        // Device Information
+        const deviceModel = "Unknown"; // This information cannot be reliably fetched from the browser
+        const manufacturer = "Unknown"; // This information cannot be reliably fetched from the browser
+        const deviceType = /Mobi/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
+
+        const screenWidth = screen.width;
+        const screenHeight = screen.height;
+        const availableWidth = window.screen.availWidth;
+        const availableHeight = window.screen.availHeight;
+        const screenOrientation = screen.orientation ? screen.orientation.type : 'Not supported';
+        const isTouchscreen = 'ontouchstart' in window ? 'Yes' : 'No';
+
+        // Display information
+        document.getElementById("deviceModel").textContent = deviceModel;
+        document.getElementById("manufacturer").textContent = manufacturer;
+        document.getElementById("os").textContent = navigator.platform;
+        document.getElementById("deviceType").textContent = deviceType;
+        document.getElementById("screenWidth").textContent = `${screenWidth}px`;
+        document.getElementById("screenHeight").textContent = `${screenHeight}px`;
+        document.getElementById("availableWidth").textContent = `${availableWidth}px`;
+        document.getElementById("availableHeight").textContent = `${availableHeight}px`;
+        document.getElementById("screenOrientation").textContent = screenOrientation;
+        document.getElementById("touchscreen").textContent = isTouchscreen;
+
+        // Battery Information
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(function(battery) {
+                document.getElementById('charging').textContent = battery.charging ? 'Yes' : 'No';
+                document.getElementById('batteryLevel').textContent = (battery.level * 100).toFixed(0) + '%';
+                document.getElementById('dischargingTime').textContent = battery.dischargingTime === Infinity ? 'N/A' : (battery.dischargingTime / 60).toFixed(2) + ' minutes';
+            });
+        } else {
+            document.getElementById('charging').textContent = 'Battery API not supported.';
+            document.getElementById('batteryLevel').textContent = 'Battery API not supported.';
+            document.getElementById('dischargingTime').textContent = 'Battery API not supported.';
+        }
+
+        // Network Information
+        if (navigator.connection) {
+            document.getElementById('networkType').textContent = navigator.connection.effectiveType || 'Not supported';
+            document.getElementById('downlinkSpeed').textContent = navigator.connection.downlink ? `${navigator.connection.downlink} Mbps` : 'Not supported';
+            document.getElementById('latency').textContent = navigator.connection.rtt ? `${navigator.connection.rtt} ms` : 'Not supported';
+        } else {
+            document.getElementById('networkType').textContent = 'Network Information API not supported.';
+            document.getElementById('downlinkSpeed').textContent = 'Network Information API not supported.';
+            document.getElementById('latency').textContent = 'Network Information API not supported.';
+        }
+
+        // Device Memory
+        if (navigator.deviceMemory) {
+            document.getElementById('deviceMemory').textContent = `${navigator.deviceMemory} GB`;
+        } else {
+            document.getElementById('deviceMemory').textContent = 'Device Memory API not supported.';
+        }
+
+        // CPU Cores (Approximation)
+        const getCores = () => {
+            return navigator.hardwareConcurrency || 'Not supported';
+        };
+        document.getElementById('cpuCores').textContent = `${getCores()} Cores`;
+
+        // Performance Metrics
+        const performanceTiming = window.performance.timing;
+        const loadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+        const timeSinceLoad = Date.now() - performanceTiming.navigationStart;
+
+        document.getElementById('pageLoadTime').textContent = `${(loadTime / 1000).toFixed(2)} seconds`;
+        document.getElementById('timeSincePageLoad').textContent = `${(timeSinceLoad / 1000).toFixed(2)} seconds`;
+    </script>
+</body>
+</html>
