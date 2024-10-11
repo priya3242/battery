@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accurate Device Info (With UA-CH)</title>
+    <title>Device Info (UA-CH + User-Agent)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,87 +18,77 @@
     </style>
 </head>
 <body>
-    <h1>Device Information (With UA-CH Support)</h1>
-
-    <div class="info-box">
-        <h2>Browser Info:</h2>
-        <p id="browser-info"></p>
-    </div>
+    <h1>Device Information (No APIs)</h1>
 
     <div class="info-box">
         <h2>Device Info:</h2>
-        <p id="device-info"></p>
-    </div>
-
-    <div class="info-box">
-        <h2>Operating System Info:</h2>
-        <p id="os-info"></p>
-    </div>
-
-    <div class="info-box">
-        <h2>IP Address & Location Info:</h2>
-        <p id="ip-info"></p>
+        <p id="device-info">Fetching...</p>
     </div>
 
     <script>
         // Function to fetch device information using User-Agent Client Hints (UA-CH)
-        function fetchUserAgentClientHints() {
+        function fetchDeviceInfo() {
             if ('userAgentData' in navigator) {
                 const uaData = navigator.userAgentData;
 
-                // Get the high-entropy hints for detailed device info
                 uaData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model'])
                     .then(uaHints => {
                         const platform = uaHints.platform || 'Unknown';
                         const platformVersion = uaHints.platformVersion || 'Unknown';
                         const architecture = uaHints.architecture || 'Unknown';
-                        const model = uaHints.model || 'Unknown';  // Here you get the real device model
-                        
-                        document.getElementById('device-info').innerText = `Platform: ${platform}, Version: ${platformVersion}, Architecture: ${architecture}, Model: ${model}`;
+                        const model = uaHints.model || 'Unknown';  // Model number here
+
+                        document.getElementById('device-info').innerText = 
+                            `Platform: ${platform}, Version: ${platformVersion}, Architecture: ${architecture}, Model: ${model}`;
                     })
                     .catch(err => {
                         console.error('Error fetching UA-CH data:', err);
                         fallbackDeviceInfo();
                     });
             } else {
-                // Fallback if UA-CH is not supported
                 fallbackDeviceInfo();
             }
         }
 
-        // Fallback function to detect device and browser information using traditional User-Agent string
+        // Fallback function to detect device using User-Agent string if UA-CH is not supported
         function fallbackDeviceInfo() {
             const userAgent = navigator.userAgent || 'Unknown';
             const platform = navigator.platform || 'Unknown';
-            
-            // Display fallback info if UA-CH is not available
-            document.getElementById('browser-info').innerText = `User Agent: ${userAgent}`;
-            document.getElementById('device-info').innerText = `Platform: ${platform}`;
+
+            // Parse the User-Agent string to extract information
+            const deviceInfo = parseUserAgent(userAgent);
+            document.getElementById('device-info').innerText = `User Agent: ${userAgent}, Platform: ${platform}, Details: ${deviceInfo}`;
         }
 
-        // Fetch IP Address and Location Information
-        function fetchIPInfo() {
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    const ipAddress = data.ip;
-                    document.getElementById('ip-info').innerText = `IP Address: ${ipAddress}`;
-                    
-                    // Fetch additional location details from IPinfo
-                    return fetch(`https://ipinfo.io/${ipAddress}/geo`);
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('ip-info').innerText += `, Location: ${data.city}, ${data.region}, ${data.country}`;
-                })
-                .catch(error => {
-                    document.getElementById('ip-info').innerText = 'Unable to fetch IP or location information.';
-                });
+        // Function to parse User-Agent string for basic device info
+        function parseUserAgent(ua) {
+            let deviceInfo = 'Unknown device';
+
+            if (/android/i.test(ua)) {
+                const androidMatch = ua.match(/Android\s([\d.]+)/);
+                const androidVersion = androidMatch ? androidMatch[1] : 'Unknown Android version';
+                deviceInfo = `Android ${androidVersion}`;
+            } else if (/iphone|ipad|ipod/i.test(ua)) {
+                const iosMatch = ua.match(/OS\s([\d_]+)/);
+                const iosVersion = iosMatch ? iosMatch[1].replace(/_/g, '.') : 'Unknown iOS version';
+                deviceInfo = `iOS ${iosVersion}`;
+            } else if (/linux/i.test(ua)) {
+                deviceInfo = 'Linux device';
+            } else if (/windows/i.test(ua)) {
+                const windowsMatch = ua.match(/Windows\sNT\s([\d.]+)/);
+                const windowsVersion = windowsMatch ? windowsMatch[1] : 'Unknown Windows version';
+                deviceInfo = `Windows ${windowsVersion}`;
+            } else if (/macintosh/i.test(ua)) {
+                const macMatch = ua.match(/Mac\sOS\sX\s([\d_]+)/);
+                const macVersion = macMatch ? macMatch[1].replace(/_/g, '.') : 'Unknown Mac OS version';
+                deviceInfo = `Mac OS X ${macVersion}`;
+            }
+
+            return deviceInfo;
         }
 
-        // Call the functions to detect info on page load
-        fetchUserAgentClientHints();  // Attempt to get advanced device info using UA-CH
-        fetchIPInfo();  // Fetch IP and geolocation info
+        // Call the function on page load to get device info
+        fetchDeviceInfo();  // Attempt to get advanced device info using UA-CH
     </script>
 </body>
 </html>
