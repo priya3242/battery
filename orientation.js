@@ -5,19 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const orientationDisplay = document.getElementById('orientation');
 
         // Determine orientation based on alpha value
-        if (alpha >= 45 && alpha < 135) {
+        if (alpha >= -45 && alpha < 45) {
             // Landscape Right
-            phoneIcon.src = 'https://via.placeholder.com/150/FFD700/000000?text=Landscape+Right'; // Landscape image for right
-            phoneIcon.style.transform = 'rotate(90deg)'; // Rotate for landscape
+            phoneIcon.src = 'image.png'; // Phone icon for landscape right
+            phoneIcon.style.transform = 'rotate(90deg)'; // Rotate for landscape right
             orientationDisplay.textContent = 'Landscape Right';
-        } else if (alpha >= 135 && alpha < 225) {
+        } else if (alpha >= 135 || alpha < -135) {
             // Landscape Left
-            phoneIcon.src = 'https://via.placeholder.com/150/FFD700/000000?text=Landscape+Left'; // Landscape image for left
-            phoneIcon.style.transform = 'rotate(-90deg)'; // Rotate for landscape
+            phoneIcon.src = 'image.png'; // Phone icon for landscape left
+            phoneIcon.style.transform = 'rotate(-90deg)'; // Rotate for landscape left
             orientationDisplay.textContent = 'Landscape Left';
         } else {
             // Portrait
-            phoneIcon.src = 'https://via.placeholder.com/150/FFD700/000000?text=Portrait'; // Portrait image
+            phoneIcon.src = 'image.png'; // Phone icon for portrait
             phoneIcon.style.transform = 'rotate(0deg)'; // No rotation for portrait
             orientationDisplay.textContent = 'Portrait';
         }
@@ -44,9 +44,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update the icon when the page loads
     updateOrientationIcon(0); // Default to portrait at page load
-
-    // Update the icon when the orientation changes
-    window.addEventListener('resize', function() {
-        updateOrientationIcon(parseFloat(document.getElementById('rotation-z').textContent));
-    });
 });
