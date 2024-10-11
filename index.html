@@ -3,34 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Device Info</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS -->
 </head>
 <body>
     <div class="container">
-        <h1 class="animated-title">Device Information</h1>
-
-        <!-- Double Column Layout -->
+        <h1>Device Information</h1>
+        
+        <!-- Double column layout for device details -->
         <div class="double-column">
-            <!-- First Column -->
+            <!-- First Column (Platform Details) -->
             <div class="column">
                 <div class="device-details" id="device-info-1">
-                    <!-- Device info will be inserted here by the script -->
-                    Loading device information...
+                    <!-- Platform info will be dynamically inserted here -->
                 </div>
             </div>
 
-            <!-- Second Column -->
+            <!-- Second Column (Browser & Device Details) -->
             <div class="column">
                 <div class="device-details" id="device-info-2">
-                    <!-- Additional info or second set of device details -->
-                    Loading additional info...
+                    <!-- Browser & device-related info will be dynamically inserted here -->
                 </div>
             </div>
         </div>
     </div>
-    
-    <script src="deviceinfo.js"></script>
-    <script src="script.js"></script>
+
+    <script src="deviceinfo.js"></script> <!-- The JS file to handle device info fetching -->
+    <script src="script.js"></script> <!-- The script to handle dynamic DOM insertion -->
 </body>
 </html>
