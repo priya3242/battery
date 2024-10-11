@@ -27,8 +27,16 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('deviceorientation', function(event) {
         const rotationZ = event.alpha; // Z-axis rotation (alpha)
 
+        // Debug log to check if rotationZ is being captured
+        console.log("Rotation Z: ", rotationZ);
+
         // Update the UI with the Z-axis rotation details
-        document.getElementById('rotation-z').textContent = rotationZ.toFixed(2);
+        const rotationZElement = document.getElementById('rotation-z');
+        if (rotationZElement) {
+            rotationZElement.textContent = rotationZ.toFixed(2); // Use toFixed to format the number
+        } else {
+            console.error("Element with ID 'rotation-z' not found.");
+        }
 
         // Update the phone icon and orientation text based on alpha value
         updateOrientationIcon(rotationZ);
