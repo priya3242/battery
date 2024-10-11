@@ -114,6 +114,13 @@
         <h2>9. Motion Sensor Data</h2>
         <p><strong>Acceleration (x, y, z):</strong> <span id="acceleration">Fetching...</span></p>
         <p><strong>Rotation (alpha, beta, gamma):</strong> <span id="rotation">Fetching...</span></p>
+
+        <h2>10. Device Orientation (Live)</h2>
+        <p><strong>Direction:</strong> <span id="direction">Fetching...</span></p>
+        <p><strong>Tilt Front / Back:</strong> <span id="tiltFrontBack">Fetching...</span></p>
+        <p><strong>Tilt Left / Right:</strong> <span id="tiltLeftRight">Fetching...</span></p>
+
+        <h2>11. Device Name</h2>
         <p><strong>Device Name:</strong> <span id="deviceName">Fetching...</span></p>
     </div>
 
@@ -165,56 +172,39 @@
 
         // CPU Cores (Approximation)
         const getCores = () => {
-            return navigator.hardwareConcurrency || 'Not supported';
+            document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency || 'Unknown';
         };
-        document.getElementById('cpuCores').textContent = getCores();
+        getCores();
 
         // Performance Metrics
-        window.addEventListener('load', () => {
-            const performanceData = performance.timing;
-            const pageLoadTime = performanceData.loadEventEnd - performanceData.navigationStart;
+        window.onload = function() {
+            const pageLoadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
             document.getElementById('pageLoadTime').textContent = `${pageLoadTime} ms`;
-            document.getElementById('timeSincePageLoad').textContent = `${Date.now() - performanceData.navigationStart} ms`;
-        });
-
-        // Fetching IP details from a third-party API (reverted to old structure)
-        fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('ipAddress').textContent = data.ip || 'N/A';
-                document.getElementById('simOperator').textContent = data.org || 'N/A';
-                document.getElementById('country').textContent = data.country || 'N/A';
-                document.getElementById('region').textContent = data.region || 'N/A';
-                document.getElementById('ispName').textContent = data.isp || 'N/A';
-                document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
-                document.getElementById('currency').textContent = data.currency || 'N/A';
-            })
-            .catch(error => console.error('Error fetching IP details:', error));
+            document.getElementById('timeSincePageLoad').textContent = `${Math.round(performance.now())} ms`;
+        };
 
         // Motion Sensor Data
         if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', (event) => {
-                const acceleration = event.accelerationIncludingGravity;
-                document.getElementById('acceleration').textContent = 
-                    `X: ${acceleration.x.toFixed(2)} m/s², Y: ${acceleration.y.toFixed(2)} m/s², Z: ${acceleration.z.toFixed(2)} m/s²`;
-            });
-
-            window.addEventListener('deviceorientation', (event) => {
-                document.getElementById('rotation').textContent = 
-                    `Alpha: ${event.alpha.toFixed(2)}°, Beta: ${event.beta.toFixed(2)}°, Gamma: ${event.gamma.toFixed(2)}°`;
+            window.addEventListener('devicemotion', function(event) {
+                const accel = event.acceleration;
+                document.getElementById('acceleration').textContent = `x: ${accel.x?.toFixed(2)} m/s², y: ${accel.y?.toFixed(2)} m/s², z: ${accel.z?.toFixed(2)} m/s²`;
             });
         } else {
-            document.getElementById('acceleration').textContent = 'Device Motion not supported.';
-            document.getElementById('rotation').textContent = 'Device Orientation not supported.';
+            document.getElementById('acceleration').textContent = 'Device Motion API not supported.';
         }
 
-        // Function to fetch device name (using a third-party service or API)
-        function fetchDeviceName() {
-            const deviceName = navigator.userAgent; // Placeholder for demonstration
-            document.getElementById('deviceName').textContent = deviceName;
+        // Device Orientation Data
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                document.getElementById('direction').textContent = `${event.alpha?.toFixed(2)}°`;
+                document.getElementById('tiltFrontBack').textContent = `${event.beta?.toFixed(2)}°`;
+                document.getElementById('tiltLeftRight').textContent = `${event.gamma?.toFixed(2)}°`;
+            });
+        } else {
+            document.getElementById('direction').textContent = 'Device Orientation API not supported.';
+            document.getElementById('tiltFrontBack').textContent = 'Device Orientation API not supported.';
+            document.getElementById('tiltLeftRight').textContent = 'Device Orientation API not supported.';
         }
-
-        fetchDeviceName();
     </script>
 </body>
 </html>
