@@ -119,42 +119,31 @@
     <script src="memoryinfo.js" type="module"></script>
     <script src="networkinfo.js" type="module"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", async function() {
             const deviceInfoInstance = new DeviceInfo();
 
-            deviceInfoInstance.fetchDeviceInfo(function(info) {
-                const deviceInfoElement = document.getElementById('device-info');
-                deviceInfoElement.innerHTML = `
-                    <strong>Platform:</strong> ${info.platform}<br>
-                    <strong>Platform Version:</strong> ${info.platformVersion}<br>
-                    <strong>Architecture:</strong> ${info.architecture}<br>
-                    <strong>Model:</strong> ${info.model}<br>
-                    <strong>Browser Version:</strong> ${info.browserVersion}<br>
-                    <strong>Mobile:</strong> ${info.isMobile ? 'Yes' : 'No'}<br>
-                    <strong>Brands:</strong> ${info.brands}
-                `;
-            });
-        });
-    </script>
-            // Battery Info
-            import('./batteryinfo.js').then(module => {
-                module.getBatteryInfo();
-            });
+            // Fetch device information
+            const info = await deviceInfoInstance.fetchDeviceInfo();
+            document.getElementById('platform').innerText = info.platform;
+            document.getElementById('platformVersion').innerText = info.platformVersion;
+            document.getElementById('architecture').innerText = info.architecture;
+            document.getElementById('model').innerText = info.model;
+            document.getElementById('browserVersion').innerText = info.browserVersion;
+            document.getElementById('isMobile').innerText = info.isMobile ? 'Yes' : 'No';
+            document.getElementById('brands').innerText = info.brands;
 
-            // CPU Info
-            import('./cpuinfo.js').then(module => {
-                module.getCpuCores();
-            });
+            // Fetch additional information
+            const batteryModule = await import('./batteryinfo.js');
+            batteryModule.getBatteryInfo();
 
-            // Memory Info
-            import('./memoryinfo.js').then(module => {
-                module.getDeviceMemory();
-            });
+            const cpuModule = await import('./cpuinfo.js');
+            cpuModule.getCpuCores();
 
-            // Network Info
-            import('./networkinfo.js').then(module => {
-                module.getNetworkInfo();
-            });
+            const memoryModule = await import('./memoryinfo.js');
+            memoryModule.getDeviceMemory();
+
+            const networkModule = await import('./networkinfo.js');
+            networkModule.getNetworkInfo();
         });
     </script>
 </body>
