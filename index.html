@@ -113,7 +113,7 @@
     </div>
 
     <!-- Include the JavaScript files -->
-    <script src="deviceinfo.js"></script>
+    <script src="deviceinfo.js" type="module"></script>
     <script src="batteryinfo.js" type="module"></script>
     <script src="cpuinfo.js" type="module"></script>
     <script src="memoryinfo.js" type="module"></script>
@@ -123,27 +123,35 @@
             const deviceInfoInstance = new DeviceInfo();
 
             // Fetch device information
-            const info = await deviceInfoInstance.fetchDeviceInfo();
-            document.getElementById('platform').innerText = info.platform;
-            document.getElementById('platformVersion').innerText = info.platformVersion;
-            document.getElementById('architecture').innerText = info.architecture;
-            document.getElementById('model').innerText = info.model;
-            document.getElementById('browserVersion').innerText = info.browserVersion;
-            document.getElementById('isMobile').innerText = info.isMobile ? 'Yes' : 'No';
-            document.getElementById('brands').innerText = info.brands;
+            try {
+                const info = await deviceInfoInstance.fetchDeviceInfo();
+                document.getElementById('platform').innerText = info.platform || 'Unknown';
+                document.getElementById('platformVersion').innerText = info.platformVersion || 'Unknown';
+                document.getElementById('architecture').innerText = info.architecture || 'Unknown';
+                document.getElementById('model').innerText = info.model || 'Unknown';
+                document.getElementById('browserVersion').innerText = info.browserVersion || 'Unknown';
+                document.getElementById('isMobile').innerText = info.isMobile ? 'Yes' : 'No';
+                document.getElementById('brands').innerText = info.brands || 'Unknown';
+            } catch (error) {
+                console.error("Error fetching device info:", error);
+            }
 
             // Fetch additional information
-            const batteryModule = await import('./batteryinfo.js');
-            batteryModule.getBatteryInfo();
+            try {
+                const batteryModule = await import('./batteryinfo.js');
+                batteryModule.getBatteryInfo();
 
-            const cpuModule = await import('./cpuinfo.js');
-            cpuModule.getCpuCores();
+                const cpuModule = await import('./cpuinfo.js');
+                cpuModule.getCpuCores();
 
-            const memoryModule = await import('./memoryinfo.js');
-            memoryModule.getDeviceMemory();
+                const memoryModule = await import('./memoryinfo.js');
+                memoryModule.getDeviceMemory();
 
-            const networkModule = await import('./networkinfo.js');
-            networkModule.getNetworkInfo();
+                const networkModule = await import('./networkinfo.js');
+                networkModule.getNetworkInfo();
+            } catch (error) {
+                console.error("Error fetching additional info:", error);
+            }
         });
     </script>
 </body>
