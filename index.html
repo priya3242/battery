@@ -3,243 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browser, Device, and Sensor Information</title>
+    <title>Device Info (Hybrid Approach)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #e6f4f1;
+            margin: 20px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #008080;
-            text-align: center;
-        }
-        h2 {
-            color: #007777;
-            margin-top: 20px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #d0e8e3;
-        }
-        .sensor {
-            background-color: #fff;
+        .info-box {
+            margin-bottom: 20px;
             padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        @media only screen and (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-            table, th, td {
-                display: block;
-                width: 100%;
-            }
-            th, td {
-                text-align: left;
-            }
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Browser, Device, and Sensor Information</h1>
-        
-        <h2>1. Browser Information</h2>
-        <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
-        <p><strong>App Version:</strong> <span id="appVersion"></span></p>
-        <p><strong>Platform:</strong> <span id="platform"></span></p>
-        <p><strong>Language:</strong> <span id="language"></span></p>
-        <p><strong>Online Status:</strong> <span id="onlineStatus"></span></p>
+    <h1>Device Information (Hybrid Approach)</h1>
 
-        <h2>2. Device Information</h2>
-        <p><strong>Screen Width:</strong> <span id="screenWidth"></span></p>
-        <p><strong>Screen Height:</strong> <span id="screenHeight"></span></p>
-        <p><strong>Available Width:</strong> <span id="availableWidth"></span></p>
-        <p><strong>Available Height:</strong> <span id="availableHeight"></span></p>
-        <p><strong>Screen Orientation:</strong> <span id="screenOrientation"></span></p>
-
-        <h2>3. Battery Information</h2>
-        <p><strong>Charging:</strong> <span id="charging">Checking...</span></p>
-        <p><strong>Battery Level:</strong> <span id="batteryLevel">Checking...</span></p>
-        <p><strong>Discharging Time:</strong> <span id="dischargingTime">Checking...</span></p>
-
-        <h2>4. Network Information</h2>
-        <p><strong>Effective Network Type:</strong> <span id="networkType">Checking...</span></p>
-        <p><strong>Downlink Speed:</strong> <span id="downlinkSpeed">Checking...</span></p>
-        <p><strong>Round-trip Latency:</strong> <span id="latency">Checking...</span></p>
-
-        <h2>5. Device Memory</h2>
-        <p><strong>Approximate RAM:</strong> <span id="deviceMemory">Checking...</span></p>
-
-        <h2>6. CPU Cores</h2>
-        <p><strong>Number of CPU Cores:</strong> <span id="cpuCores">Checking...</span></p>
-
-        <h2>7. Performance Metrics</h2>
-        <p><strong>Page Load Time:</strong> <span id="pageLoadTime">Fetching...</span></p>
-        <p><strong>Time Since Page Load:</strong> <span id="timeSincePageLoad">Fetching...</span></p>
-
-        <h2>8. IP Details</h2>
-        <p><strong>IP Address:</strong> <span id="ipAddress">Fetching...</span></p>
-        <p><strong>SIM Operator:</strong> <span id="simOperator">Fetching...</span></p>
-        <p><strong>Country:</strong> <span id="country">Fetching...</span></p>
-        <p><strong>Region:</strong> <span id="region">Fetching...</span></p>
-        <p><strong>ISP Name:</strong> <span id="ispName">Fetching...</span></p>
-        <p><strong>Mobile Status:</strong> <span id="isMobile">Fetching...</span></p>
-        <p><strong>Currency:</strong> <span id="currency">Fetching...</span></p>
-
-        <h2>9. Motion Sensor Data</h2>
-        <p><strong>Acceleration (x, y, z):</strong> <span id="acceleration">Fetching...</span></p>
-        <p><strong>Rotation (alpha, beta, gamma):</strong> <span id="rotation">Fetching...</span></p>
-
-        <h2>10. Device Orientation (Live)</h2>
-        <p><strong>Direction:</strong> <span id="direction">Fetching...</span></p>
-        <p><strong>Tilt Front / Back:</strong> <span id="tiltFrontBack">Fetching...</span></p>
-        <p><strong>Tilt Left / Right:</strong> <span id="tiltLeftRight">Fetching...</span></p>
-
-        <h2>11. Device Name</h2>
-        <p><strong>Device Name:</strong> <span id="deviceName">Fetching...</span></p>
-
-        <h2>12. Sensor Event Demonstration</h2>
-        <div class="sensor" id="devicemotion">DeviceMotionEvent: Waiting for data...</div>
-        <div class="sensor" id="deviceorientation">DeviceOrientationEvent: Waiting for data...</div>
-        <div class="sensor" id="deviceproximity">DeviceProximityEvent: (Deprecated) Waiting for data...</div>
-        <div class="sensor" id="userproximity">UserProximityEvent: (Deprecated) Waiting for data...</div>
-        <div class="sensor" id="ambientlight">AmbientLightEvent: Waiting for data...</div>
+    <div class="info-box">
+        <h2>Browser Info:</h2>
+        <p id="browser-info"></p>
     </div>
 
+    <div class="info-box">
+        <h2>Device Info:</h2>
+        <p id="device-info"></p>
+    </div>
+
+    <div class="info-box">
+        <h2>Operating System Info:</h2>
+        <p id="os-info"></p>
+    </div>
+
+    <div class="info-box">
+        <h2>IP Address & Location Info:</h2>
+        <p id="ip-info"></p>
+    </div>
+
+    <!-- Include UAParser.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ua-parser-js/0.7.31/ua-parser.min.js"></script>
+    
     <script>
-        // Browser Information
-        document.getElementById('userAgent').textContent = navigator.userAgent || 'Not supported';
-        document.getElementById('appVersion').textContent = navigator.appVersion || 'Not supported';
-        document.getElementById('platform').textContent = navigator.platform || 'Not supported';
-        document.getElementById('language').textContent = navigator.language || 'Not supported';
-        document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
-
-        // Device Information
-        document.getElementById('screenWidth').textContent = `${screen.width} px` || 'Not supported';
-        document.getElementById('screenHeight').textContent = `${screen.height} px` || 'Not supported';
-        document.getElementById('availableWidth').textContent = `${window.screen.availWidth} px` || 'Not supported';
-        document.getElementById('availableHeight').textContent = `${window.screen.availHeight} px` || 'Not supported';
-        document.getElementById('screenOrientation').textContent = screen.orientation ? screen.orientation.type : 'Not supported';
-
-        // Battery Information
-        if ('getBattery' in navigator) {
-            navigator.getBattery().then(function(battery) {
-                document.getElementById('charging').textContent = battery.charging ? 'Yes' : 'No';
-                document.getElementById('batteryLevel').textContent = (battery.level * 100).toFixed(0) + '%';
-                document.getElementById('dischargingTime').textContent = battery.dischargingTime === Infinity ? 'N/A' : (battery.dischargingTime / 60).toFixed(2) + ' minutes';
-            }).catch(() => {
-                document.getElementById('charging').textContent = 'Error fetching battery information';
-            });
-        } else {
-            document.getElementById('charging').textContent = 'Battery API not supported.';
-            document.getElementById('batteryLevel').textContent = 'Battery API not supported.';
-            document.getElementById('dischargingTime').textContent = 'Battery API not supported.';
+        // Function to detect device and browser information using native JavaScript APIs
+        function fallbackDeviceInfo() {
+            const userAgent = navigator.userAgent || 'Unknown';
+            const platform = navigator.platform || 'Unknown';
+            const browser = navigator.userAgentData ? navigator.userAgentData.brands[0].brand : userAgent;
+            
+            // Fallback info
+            document.getElementById('browser-info').innerText = `User Agent: ${userAgent}`;
+            document.getElementById('device-info').innerText = `Platform: ${platform}`;
+            document.getElementById('os-info').innerText = `OS: ${navigator.platform}`;
         }
 
-        // Network Information
-        if (navigator.connection) {
-            document.getElementById('networkType').textContent = navigator.connection.effectiveType || 'Unknown';
-            document.getElementById('downlinkSpeed').textContent = navigator.connection.downlink + ' Mbps' || 'Unknown';
-            document.getElementById('latency').textContent = navigator.connection.rtt + ' ms' || 'Unknown';
-        } else {
-            document.getElementById('networkType').textContent = 'Network API not supported.';
-            document.getElementById('downlinkSpeed').textContent = 'Network API not supported.';
-            document.getElementById('latency').textContent = 'Network API not supported.';
+        // Main function that tries to use UAParser.js first, and falls back to native APIs if not supported
+        function detectDeviceInfo() {
+            try {
+                // Try to use UAParser.js for detailed info
+                const parser = new UAParser();
+                const browser = parser.getBrowser();
+                const device = parser.getDevice();
+                const os = parser.getOS();
+
+                // Display info from UAParser.js if successful
+                document.getElementById('browser-info').innerText = `Browser Name: ${browser.name}, Version: ${browser.version}`;
+                document.getElementById('device-info').innerText = `Device: ${device.vendor || 'Unknown'}, Model: ${device.model || 'Unknown'}, Type: ${device.type || 'Unknown'}`;
+                document.getElementById('os-info').innerText = `Operating System: ${os.name}, Version: ${os.version}`;
+            } catch (error) {
+                console.error('UAParser.js failed or not supported, falling back to native APIs:', error);
+                // Fallback to native JavaScript if third-party API fails
+                fallbackDeviceInfo();
+            }
         }
 
-        // Device Memory
-        document.getElementById('deviceMemory').textContent = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Not supported';
-
-        // CPU Cores
-        document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency || 'Not supported';
-
-        // Performance Metrics
-        window.addEventListener('load', function() {
-            const loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
-            document.getElementById('pageLoadTime').textContent = loadTime + ' ms';
-            document.getElementById('timeSincePageLoad').textContent = window.performance.now().toFixed(2) + ' ms';
-        });
-
-        // IP Information and Geolocation (requires external service)
-        // Hide the IP details section initially
-document.getElementById('ip-details-section').style.display = 'none';
-
-// Fetch the user's public IP address
-fetch('https://api.ipify.org?format=json')
-    .then(response => response.json())
-    .then(data => {
-        const userIp = data.ip;
-        document.getElementById('ipAddress').textContent = userIp;
-
-        // Fetch IP details from ipinfo.io based on the IP address
-        return fetch(`https://ipinfo.io/${userIp}/json`);
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Show the IP details section if IP details are fetched successfully
-        document.getElementById('ip-details-section').style.display = 'block';
-
-        // Populate the fields with available data, or fallback to 'N/A'
-        document.getElementById('simOperator').textContent = data.org || 'N/A';
-        document.getElementById('country').textContent = data.country || 'N/A';
-        document.getElementById('region').textContent = data.region || 'N/A';
-        document.getElementById('ispName').textContent = data.hostname || 'N/A';
-        document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
-        
-        // `currency` is not provided by ipinfo.io, so it's omitted
-        document.getElementById('currency').textContent = 'Not Available'; 
-    })
-    .catch(error => {
-        console.error('Error fetching IP or details:', error);
-
-        // Handle any error in fetching IP or details
-        document.getElementById('ipAddress').textContent = 'Error fetching IP';
-        document.getElementById('simOperator').textContent = 'Error fetching details';
-    });
-
-        // Call an IP geolocation API for fetching these details
-
-        // Sensor data handling (motion, orientation, etc.)
-        if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', function(event) {
-                document.getElementById('acceleration').textContent = `X: ${event.acceleration.x.toFixed(2)}, Y: ${event.acceleration.y.toFixed(2)}, Z: ${event.acceleration.z.toFixed(2)}`;
-            });
-        } else {
-            document.getElementById('acceleration').textContent = 'DeviceMotionEvent not supported.';
+        // Fetch IP Address and Location Information
+        function fetchIPInfo() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ipAddress = data.ip;
+                    document.getElementById('ip-info').innerText = `IP Address: ${ipAddress}`;
+                    
+                    // Fetch additional location details from IPinfo
+                    return fetch(`https://ipinfo.io/${ipAddress}/geo`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ip-info').innerText += `, Location: ${data.city}, ${data.region}, ${data.country}`;
+                })
+                .catch(error => {
+                    document.getElementById('ip-info').innerText = 'Unable to fetch IP or location information.';
+                });
         }
 
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', function(event) {
-                document.getElementById('rotation').textContent = `Alpha: ${event.alpha.toFixed(2)}, Beta: ${event.beta.toFixed(2)}, Gamma: ${event.gamma.toFixed(2)}`;
-            });
-        } else {
-            document.getElementById('rotation').textContent = 'DeviceOrientationEvent not supported.';
-        }
+        // Call the functions to detect info on page load
+        detectDeviceInfo();
+        fetchIPInfo();
     </script>
 </body>
 </html>
