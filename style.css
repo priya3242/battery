@@ -14,28 +14,28 @@ body {
 }
 
 /* Premium Color Scheme */
-h1, h2 {
+h1 {
     color: #ffd700; /* Gold */
     text-align: center;
 }
 
-.double-column {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.column {
-    flex: 1;
-    margin: 10px;
-}
-
-/* Device Details */
+/* Tabular Layout Styles */
 .device-details {
-    background: #222; /* Darker background for device details */
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 10px; /* Space between the columns */
+    padding: 10px;
+    background: #222; /* Background color for the details section */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.device-details > div {
+    padding: 10px;
+    border: 1px solid #333; /* Border for each cell */
+}
+
+.device-details strong {
+    color: #ffd700; /* Gold for labels */
 }
 
 /* Responsive Adjustments */
@@ -48,21 +48,7 @@ h1, h2 {
         font-size: 1.5em;
     }
 
-    .double-column {
-        flex-direction: column; /* Stack columns on smaller screens */
+    .device-details {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
     }
-
-    .column {
-        margin: 0; /* Remove margin for better stacking */
-    }
-}
-
-/* Hover & Animations */
-.device-details {
-    transition: all 0.3s ease-in-out;
-}
-
-.device-details:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); /* Gold shadow */
 }
