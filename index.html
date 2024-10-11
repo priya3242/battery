@@ -3,92 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Info (UA-CH + User-Agent)</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .info-box {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Device Info</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Device Information (No APIs)</h1>
+    <div class="container">
+        <h1>Your Device Information</h1>
+        <div id="device-info" class="device-info">
+            Fetching device info...
+        </div>
 
-    <div class="info-box">
-        <h2>Device Info:</h2>
-        <p id="device-info">Fetching...</p>
+        <h2>Battery Information</h2>
+        <div class="battery-info">
+            <strong>Battery Charging:</strong> <span id="batteryCharging">Fetching...</span><br>
+            <strong>Battery Level:</strong> <span id="batteryLevel">Fetching...</span>
+        </div>
+
+        <h2>CPU Information</h2>
+        <div class="cpu-info">
+            <strong>CPU Cores:</strong> <span id="cpuCores">Fetching...</span>
+        </div>
+
+        <h2>Memory Information</h2>
+        <div class="memory-info">
+            <strong>Device Memory:</strong> <span id="deviceMemory">Fetching...</span>
+        </div>
+
+        <h2>Network Information</h2>
+        <div class="network-info">
+            <strong>Network Type:</strong> <span id="networkType">Fetching...</span><br>
+            <strong>Downlink Speed:</strong> <span id="downlinkSpeed">Fetching...</span><br>
+            <strong>Latency:</strong> <span id="latency">Fetching...</span>
+        </div>
     </div>
 
+    <!-- Include the JavaScript files -->
+    <script src="deviceinfo.js"></script>
+    <script src="batteryinfo.js" type="module"></script>
+    <script src="cpuinfo.js" type="module"></script>
+    <script src="memoryinfo.js" type="module"></script>
+    <script src="networkinfo.js" type="module"></script>
+
     <script>
-        // Function to fetch device information using User-Agent Client Hints (UA-CH)
-        function fetchDeviceInfo() {
-            if ('userAgentData' in navigator) {
-                const uaData = navigator.userAgentData;
+        document.addEventListener("DOMContentLoaded", function() {
+            // Device Info
+            const deviceInfoInstance = new DeviceInfo();
+            deviceInfoInstance.fetchDeviceInfo(function(info) {
+                const deviceInfoElement = document.getElementById('device-info');
+                deviceInfoElement.innerHTML = `
+                    <strong>Platform:</strong> ${info.platform}<br>
+                    <strong>Platform Version:</strong> ${info.platformVersion}<br>
+                    <strong>Architecture:</strong> ${info.architecture}<br>
+                    <strong>Model:</strong> ${info.model}<br>
+                    <strong>Browser Version:</strong> ${info.browserVersion}<br>
+                    <strong>Mobile:</strong> ${info.isMobile ? 'Yes' : 'No'}<br>
+                    <strong>Brands:</strong> ${info.brands}
+                `;
+            });
 
-                uaData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model'])
-                    .then(uaHints => {
-                        const platform = uaHints.platform || 'Unknown';
-                        const platformVersion = uaHints.platformVersion || 'Unknown';
-                        const architecture = uaHints.architecture || 'Unknown';
-                        const model = uaHints.model || 'Unknown';  // Model number here
+            // Battery Info
+            import('./batteryinfo.js').then(module => {
+                module.getBatteryInfo();
+            });
 
-                        document.getElementById('device-info').innerText = 
-                            `Platform: ${platform}, Version: ${platformVersion}, Architecture: ${architecture}, Model: ${model}`;
-                    })
-                    .catch(err => {
-                        console.error('Error fetching UA-CH data:', err);
-                        fallbackDeviceInfo();
-                    });
-            } else {
-                fallbackDeviceInfo();
-            }
-        }
+            // CPU Info
+            import('./cpuinfo.js').then(module => {
+                module.getCpuCores();
+            });
 
-        // Fallback function to detect device using User-Agent string if UA-CH is not supported
-        function fallbackDeviceInfo() {
-            const userAgent = navigator.userAgent || 'Unknown';
-            const platform = navigator.platform || 'Unknown';
+            // Memory Info
+            import('./memoryinfo.js').then(module => {
+                module.getDeviceMemory();
+            });
 
-            // Parse the User-Agent string to extract information
-            const deviceInfo = parseUserAgent(userAgent);
-            document.getElementById('device-info').innerText = `User Agent: ${userAgent}, Platform: ${platform}, Details: ${deviceInfo}`;
-        }
-
-        // Function to parse User-Agent string for basic device info
-        function parseUserAgent(ua) {
-            let deviceInfo = 'Unknown device';
-
-            if (/android/i.test(ua)) {
-                const androidMatch = ua.match(/Android\s([\d.]+)/);
-                const androidVersion = androidMatch ? androidMatch[1] : 'Unknown Android version';
-                deviceInfo = `Android ${androidVersion}`;
-            } else if (/iphone|ipad|ipod/i.test(ua)) {
-                const iosMatch = ua.match(/OS\s([\d_]+)/);
-                const iosVersion = iosMatch ? iosMatch[1].replace(/_/g, '.') : 'Unknown iOS version';
-                deviceInfo = `iOS ${iosVersion}`;
-            } else if (/linux/i.test(ua)) {
-                deviceInfo = 'Linux device';
-            } else if (/windows/i.test(ua)) {
-                const windowsMatch = ua.match(/Windows\sNT\s([\d.]+)/);
-                const windowsVersion = windowsMatch ? windowsMatch[1] : 'Unknown Windows version';
-                deviceInfo = `Windows ${windowsVersion}`;
-            } else if (/macintosh/i.test(ua)) {
-                const macMatch = ua.match(/Mac\sOS\sX\s([\d_]+)/);
-                const macVersion = macMatch ? macMatch[1].replace(/_/g, '.') : 'Unknown Mac OS version';
-                deviceInfo = `Mac OS X ${macVersion}`;
-            }
-
-            return deviceInfo;
-        }
-
-        // Call the function on page load to get device info
-        fetchDeviceInfo();  // Attempt to get advanced device info using UA-CH
+            // Network Info
+            import('./networkinfo.js').then(module => {
+                module.getNetworkInfo();
+            });
+        });
     </script>
 </body>
 </html>
