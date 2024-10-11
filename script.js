@@ -1,24 +1,28 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const deviceInfoInstance = new DeviceInfo(); // For both devices
+    const deviceInfoInstance = new DeviceInfo();
 
-    // Check if the device-info elements exist
-    const deviceInfoElement1 = document.getElementById('device-info-1');
+    // Get the device-info element
+    const deviceInfoElement = document.getElementById('device-info');
 
-    if (!deviceInfoElement1 ) {
-        console.error("Error: Device info elements not found in the DOM.");
+    if (!deviceInfoElement) {
+        console.error("Error: 'device-info' element not found in the DOM.");
         return;
     }
 
-    // Fetch device info for Device 1
+    // Fetch device info for the current device
     deviceInfoInstance.fetchDeviceInfo(function(info) {
-        // Update Device 1 info
-        deviceInfoElement1.innerHTML = `
-            <strong>Platform:</strong> ${info.platform}<br>
-            <strong>Platform Version:</strong> ${info.platformVersion}<br>
-            <strong>Architecture:</strong> ${info.architecture}<br>
-            <strong>Model:</strong> ${info.model}<br>
-            <strong>Browser Version:</strong> ${info.browserVersion}<br>
-            <strong>Mobile:</strong> ${info.isMobile ? 'Yes' : 'No'}<br>
-            <strong>Brands:</strong> ${info.brands}<br>
-        `;
+        if (info) {
+            deviceInfoElement.innerHTML = `
+                <tr><th>Platform</th><td>${info.platform || 'Unknown'}</td></tr>
+                <tr><th>Platform Version</th><td>${info.platformVersion || 'Unknown'}</td></tr>
+                <tr><th>Architecture</th><td>${info.architecture || 'Unknown'}</td></tr>
+                <tr><th>Model</th><td>${info.model || 'Unknown'}</td></tr>
+                <tr><th>Browser Version</th><td>${info.browserVersion || 'Unknown'}</td></tr>
+                <tr><th>Mobile</th><td>${info.isMobile ? 'Yes' : 'No'}</td></tr>
+                <tr><th>Brands</th><td>${info.brands || 'Unknown'}</td></tr>
+            `;
+        } else {
+            console.error("Error: Unable to fetch device info.");
+        }
     });
+});
