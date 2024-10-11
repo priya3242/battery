@@ -3,129 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Info with Animated Table</title>
+    <title>Device Info with Orientation and Animation</title>
     <style>
-        body {
-            background-color: #1a1a1a; /* Black tone */
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            text-align: center;
-            padding: 20px;
-        }
-
-        h1 {
-            color: gold;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 80%;
-            margin: 0 auto;
-            border-collapse: collapse;
-            border: 2px solid gold;
-            animation: border-glow 2s ease-in-out infinite alternate;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #444;
-        }
-
-        th {
-            background-color: #333; /* Ash tone for header */
-            color: gold;
-            font-weight: bold;
-        }
-
-        td {
-            background-color: #2a2a2a; /* Ash tone for data rows */
-        }
-
-        /* Animation for table border glow */
-        @keyframes border-glow {
-            from {
-                box-shadow: 0 0 10px gold, 0 0 20px gold;
-            }
-            to {
-                box-shadow: 0 0 20px gold, 0 0 40px gold;
-            }
-        }
+        /* Your CSS styles here */
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Device Information</h1>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Attribute</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="device-info">
-                <tr>
-                    <td>Platform</td>
-                    <td id="platform">Loading...</td>
-                </tr>
-                <tr>
-                    <td>Platform Version</td>
-                    <td id="platformVersion">Loading...</td>
-                </tr>
-                <tr>
-                    <td>Architecture</td>
-                    <td id="architecture">Loading...</td>
-                </tr>
-                <tr>
-                    <td>Model</td>
-                    <td id="model">Loading...</td>
-                </tr>
-                <tr>
-                    <td>Browser Version</td>
-                    <td id="browserVersion">Loading...</td>
-                </tr>
-                <tr>
-                    <td>Is Mobile</td>
-                    <td id="isMobile">Loading...</td>
-                </tr>
-                <tr>
-                    <td>Brands</td>
-                    <td id="brands">Loading...</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Your HTML content here -->
+        <div class="phone-model" id="phone-model"></div>
+        <p id="orientation-data">Waiting for orientation data...</p>
     </div>
 
-    <script>
-        // JavaScript function to fetch and display device information
-        const deviceInfo = new DeviceInfo();
-
-        deviceInfo.fetchDeviceInfo(function(info) {
-            document.getElementById('platform').innerText = info.platform;
-            document.getElementById('platformVersion').innerText = info.platformVersion;
-            document.getElementById('architecture').innerText = info.architecture;
-            document.getElementById('model').innerText = info.model;
-            document.getElementById('browserVersion').innerText = info.browserVersion;
-            document.getElementById('isMobile').innerText = info.isMobile ? "Yes" : "No";
-            document.getElementById('brands').innerText = info.brands;
-        });
-    </script>
-
-    <!-- Including DeviceInfo Script -->
+    <!-- Ensure this script is placed before any code that uses DeviceInfo -->
     <script>
     (function(global) {
         'use strict';
 
         function DeviceInfo() {
-            // Function to fetch device information using User-Agent Client Hints (UA-CH)
             this.fetchDeviceInfo = function(callback) {
                 if ('userAgentData' in navigator) {
                     navigator.userAgentData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model', 'uaFullVersion'])
@@ -157,24 +54,20 @@
                 }
             };
 
-            // Fallback function to detect device using basic platform info if UA-CH is not supported
             this.fallbackDeviceInfo = function() {
                 const platform = navigator.platform || 'Unknown';
                 const deviceInfo = this.parseUserAgent();
-
                 return {
                     platform: platform,
                     details: deviceInfo,
-                    isMobile: /Mobi|Android/i.test(platform), // Simple mobile device detection based on platform
-                    brands: 'Unknown',  // Can't get brands with UA fallback
-                    browserVersion: 'Unknown'  // Can't determine precise browser version with UA fallback
+                    isMobile: /Mobi|Android/i.test(platform),
+                    brands: 'Unknown',
+                    browserVersion: 'Unknown'
                 };
             };
 
-            // Function to parse platform information for basic device info (as a fallback)
             this.parseUserAgent = function() {
                 let deviceInfo = 'Unknown device';
-
                 if (/android/i.test(navigator.platform)) {
                     deviceInfo = 'Android Device';
                 } else if (/iphone|ipad|ipod/i.test(navigator.platform)) {
@@ -186,15 +79,42 @@
                 } else if (/macintosh/i.test(navigator.platform)) {
                     deviceInfo = 'Mac OS Device';
                 }
-
                 return deviceInfo;
             };
         }
 
-        // Expose the DeviceInfo class to the global object
         global.DeviceInfo = DeviceInfo;
 
     })(this);
+    </script>
+
+    <!-- Script using DeviceInfo after it's defined -->
+    <script>
+        const deviceInfo = new DeviceInfo();
+        deviceInfo.fetchDeviceInfo(function(info) {
+            console.log(info); // Check device info in the console
+            document.getElementById('platform').innerText = info.platform;
+            document.getElementById('platformVersion').innerText = info.platformVersion;
+            document.getElementById('architecture').innerText = info.architecture;
+            document.getElementById('model').innerText = info.model;
+            document.getElementById('browserVersion').innerText = info.browserVersion;
+            document.getElementById('isMobile').innerText = info.isMobile ? "Yes" : "No";
+            document.getElementById('brands').innerText = info.brands;
+        });
+
+        // Device orientation logic
+        window.addEventListener('deviceorientation', function(event) {
+            const alpha = event.alpha;
+            const beta = event.beta;
+            const gamma = event.gamma;
+            document.getElementById('orientation-data').innerHTML = 
+                `<strong>Orientation Data:</strong><br>
+                Rotation Z (Alpha): ${alpha.toFixed(2)}<br>
+                Tilt X (Beta): ${beta.toFixed(2)}<br>
+                Tilt Y (Gamma): ${gamma.toFixed(2)}`;
+            document.getElementById('phone-model').style.transform = 
+                `rotateX(${beta}deg) rotateY(${gamma}deg) rotateZ(${alpha}deg)`;
+        });
     </script>
 
 </body>
