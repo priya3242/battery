@@ -1,4 +1,4 @@
-// cpuInfo.js
+
 export function getCpuCores() {
     if (navigator.hardwareConcurrency) {
         document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency;
