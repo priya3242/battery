@@ -118,22 +118,24 @@
     <script src="cpuinfo.js" type="module"></script>
     <script src="memoryinfo.js" type="module"></script>
     <script src="networkinfo.js" type="module"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Device Info
             const deviceInfoInstance = new DeviceInfo();
-            deviceInfoInstance.fetchDeviceInfo(function(info) {
-                // Populate the table cells with the fetched information
-                document.getElementById('platform').textContent = info.platform || 'N/A';
-                document.getElementById('platformVersion').textContent = info.platformVersion || 'N/A';
-                document.getElementById('architecture').textContent = info.architecture || 'N/A';
-                document.getElementById('model').textContent = info.model || 'N/A';
-                document.getElementById('browserVersion').textContent = info.browserVersion || 'N/A';
-                document.getElementById('isMobile').textContent = info.isMobile ? 'Yes' : 'No';
-                document.getElementById('brands').textContent = info.brands || 'N/A';
-            });
 
+            deviceInfoInstance.fetchDeviceInfo(function(info) {
+                const deviceInfoElement = document.getElementById('device-info');
+                deviceInfoElement.innerHTML = `
+                    <strong>Platform:</strong> ${info.platform}<br>
+                    <strong>Platform Version:</strong> ${info.platformVersion}<br>
+                    <strong>Architecture:</strong> ${info.architecture}<br>
+                    <strong>Model:</strong> ${info.model}<br>
+                    <strong>Browser Version:</strong> ${info.browserVersion}<br>
+                    <strong>Mobile:</strong> ${info.isMobile ? 'Yes' : 'No'}<br>
+                    <strong>Brands:</strong> ${info.brands}
+                `;
+            });
+        });
+    </script>
             // Battery Info
             import('./batteryinfo.js').then(module => {
                 module.getBatteryInfo();
