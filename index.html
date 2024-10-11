@@ -3,28 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Device Info</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS -->
+    <title>Device Info with Animated Table</title>
+    <style>
+        body {
+            background-color: #1a1a1a; /* Black tone */
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: gold;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 2px solid gold;
+            animation: border-glow 2s ease-in-out infinite alternate;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #333; /* Ash tone for header */
+            color: gold;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #2a2a2a; /* Ash tone for data rows */
+        }
+
+        /* Animation for table border glow */
+        @keyframes border-glow {
+            from {
+                box-shadow: 0 0 10px gold, 0 0 20px gold;
+            }
+            to {
+                box-shadow: 0 0 20px gold, 0 0 40px gold;
+            }
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
         <h1>Device Information</h1>
-        
-        <!-- Double column layout for device details -->
-        <div class="double-column">
-            <!-- First Column (Device 1) -->
-            <div class="column">
-                <h2>Device 1</h2>
-                <div class="device-details" id="device-info-1">
-                    <!-- Device 1 info will be dynamically inserted here -->
-                </div>
-            </div>
-            
-        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="device-info">
+                <tr>
+                    <td>Platform</td>
+                    <td id="platform">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Platform Version</td>
+                    <td id="platformVersion">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Architecture</td>
+                    <td id="architecture">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Model</td>
+                    <td id="model">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Browser Version</td>
+                    <td id="browserVersion">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Is Mobile</td>
+                    <td id="isMobile">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Brands</td>
+                    <td id="brands">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <script src="deviceinfo.js"></script> <!-- The JS file to handle device info fetching -->
-    <script src="script.js"></script> <!-- The script to handle dynamic DOM insertion -->
+    <script>
+        // JavaScript function to fetch and display device information
+        const deviceInfo = new DeviceInfo();
+
+        deviceInfo.fetchDeviceInfo(function(info) {
+            document.getElementById('platform').innerText = info.platform;
+            document.getElementById('platformVersion').innerText = info.platformVersion;
+            document.getElementById('architecture').innerText = info.architecture;
+            document.getElementById('model').innerText = info.model;
+            document.getElementById('browserVersion').innerText = info.browserVersion;
+            document.getElementById('isMobile').innerText = info.isMobile ? "Yes" : "No";
+            document.getElementById('brands').innerText = info.brands;
+        });
+    </script>
+
+    <!-- Including DeviceInfo Script -->
+    <script>
+    (function(global) {
+        'use strict';
+
+        function DeviceInfo() {
+            // Function to fetch device information using User-Agent Client Hints (UA-CH)
+            this.fetchDeviceInfo = function(callback) {
+                if ('userAgentData' in navigator) {
+                    navigator.userAgentData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model', 'uaFullVersion'])
+                        .then(uaHints => {
+                            const platform = uaHints.platform || 'Unknown';
+                            const platformVersion = uaHints.platformVersion || 'Unknown';
+                            const architecture = uaHints.architecture || 'Unknown';
+                            const model = uaHints.model || 'Unknown';  
+                            const browserVersion = uaHints.uaFullVersion || 'Unknown';
+                            const isMobile = navigator.userAgentData.mobile || false;
+                            const brands = navigator.userAgentData.brands.map(brand => `${brand.brand} ${brand.version}`).join(', ') || 'Unknown';
+
+                            callback({
+                                platform: platform,
+                                platformVersion: platformVersion,
+                                architecture: architecture,
+                                model: model,
+                                browserVersion: browserVersion,
+                                isMobile: isMobile,
+                                brands: brands
+                            });
+                        })
+                        .catch(err => {
+                            console.error('Error fetching UA-CH data:', err);
+                            callback(this.fallbackDeviceInfo());
+                        });
+                } else {
+                    callback(this.fallbackDeviceInfo());
+                }
+            };
+
+            // Fallback function to detect device using basic platform info if UA-CH is not supported
+            this.fallbackDeviceInfo = function() {
+                const platform = navigator.platform || 'Unknown';
+                const deviceInfo = this.parseUserAgent();
+
+                return {
+                    platform: platform,
+                    details: deviceInfo,
+                    isMobile: /Mobi|Android/i.test(platform), // Simple mobile device detection based on platform
+                    brands: 'Unknown',  // Can't get brands with UA fallback
+                    browserVersion: 'Unknown'  // Can't determine precise browser version with UA fallback
+                };
+            };
+
+            // Function to parse platform information for basic device info (as a fallback)
+            this.parseUserAgent = function() {
+                let deviceInfo = 'Unknown device';
+
+                if (/android/i.test(navigator.platform)) {
+                    deviceInfo = 'Android Device';
+                } else if (/iphone|ipad|ipod/i.test(navigator.platform)) {
+                    deviceInfo = 'iOS Device';
+                } else if (/linux/i.test(navigator.platform)) {
+                    deviceInfo = 'Linux Device';
+                } else if (/windows/i.test(navigator.platform)) {
+                    deviceInfo = 'Windows Device';
+                } else if (/macintosh/i.test(navigator.platform)) {
+                    deviceInfo = 'Mac OS Device';
+                }
+
+                return deviceInfo;
+            };
+        }
+
+        // Expose the DeviceInfo class to the global object
+        global.DeviceInfo = DeviceInfo;
+
+    })(this);
+    </script>
+
 </body>
 </html>
