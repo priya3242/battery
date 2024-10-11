@@ -20,11 +20,12 @@ body {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
-    max-width: 600px;
+    max-width: 1200px;
     width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Header Styles */
 h1, h2 {
     color: #2c3e50;
     margin-bottom: 20px;
@@ -40,10 +41,15 @@ h2 {
     margin-top: 30px;
 }
 
+/* Device Info Section */
 .device-info, .battery-info, .cpu-info, .memory-info, .network-info {
     margin-bottom: 30px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    padding: 20px;
 }
 
+/* General Font Style */
 strong {
     color: #2980b9;
 }
@@ -52,22 +58,30 @@ span {
     color: #7f8c8d;
 }
 
-.device-info {
-    background-color: #ecf0f1;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
+/* CSS Grid Layout */
+.device-info,
+.battery-info,
+.cpu-info,
+.memory-info,
+.network-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates two equal columns */
+    gap: 15px; /* Spacing between grid items */
+    align-items: center;
 }
 
-.battery-info, .cpu-info, .memory-info, .network-info {
-    background-color: #ecf0f1;
-    border-radius: 8px;
-    padding: 15px;
+.device-info span,
+.battery-info span,
+.cpu-info span,
+.memory-info span,
+.network-info span {
+    font-size: 1.1rem;
 }
 
+/* Responsive Design for Medium and Large Screens */
 @media (min-width: 768px) {
     .container {
-        max-width: 800px;
+        padding: 40px;
     }
 
     h1 {
@@ -77,33 +91,24 @@ span {
     h2 {
         font-size: 1.75rem;
     }
-}
 
-/* Button Styles */
-button {
-    background-color: #2980b9;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-button:hover {
-    background-color: #3498db;
-}
-
-/* Responsive grid layout for the sections */
-@media (min-width: 992px) {
-    .device-info, .battery-info, .cpu-info, .memory-info, .network-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        padding: 20px;
+    .device-info,
+    .battery-info,
+    .cpu-info,
+    .memory-info,
+    .network-info {
+        grid-template-columns: repeat(4, 1fr); /* Four columns on larger screens */
     }
+}
 
-    .container {
-        padding: 40px;
+/* Even better spacing on larger screens */
+@media (min-width: 1024px) {
+    .device-info,
+    .battery-info,
+    .cpu-info,
+    .memory-info,
+    .network-info {
+        grid-template-columns: repeat(6, 1fr); /* 6 columns on very large screens */
+        gap: 20px;
     }
 }
