@@ -3,8 +3,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #111; /* Black background */
-    color: #fff; /* White text */
+    background-color: #111;
+    color: #fff;
 }
 
 .container {
@@ -19,63 +19,50 @@ h1, h2 {
     text-align: center;
 }
 
-/* Double Column Layout */
 .double-column {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-    gap: 20px; /* Space between the columns */
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .column {
-    background-color: #000; /* Black background for each column */
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease-in-out;
+    flex: 1;
+    margin: 10px;
 }
 
-.column:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); /* Gold shadow */
-}
-
-/* Info Section in Each Column */
+/* Device Details */
 .device-details {
-    font-size: 0.9em; /* Smaller text to fit within the columns */
+    background: #222; /* Darker background for device details */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Responsive Adjustments */
 @media screen and (max-width: 768px) {
-    .double-column {
-        grid-template-columns: 1fr; /* Single column layout on smaller screens */
-    }
-
-    .container {
-        padding: 10px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .column {
-        padding: 10px;
-        font-size: 0.85em; /* Adjust font size for small screens */
+    body {
+        font-size: 90%;
     }
 
     h1 {
-        font-size: 1.2em;
+        font-size: 1.5em;
+    }
+
+    .double-column {
+        flex-direction: column; /* Stack columns on smaller screens */
+    }
+
+    .column {
+        margin: 0; /* Remove margin for better stacking */
     }
 }
 
-/* Animations */
-h1 {
-    animation: fadeIn 1s ease-in-out;
+/* Hover & Animations */
+.device-details {
+    transition: all 0.3s ease-in-out;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.device-details:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); /* Gold shadow */
 }
