@@ -68,7 +68,7 @@ h2.gold-heading {
 #phone-icon {
     width: 150px; /* Fixed width for the icon */
     height: auto; /* Maintain aspect ratio */
-    transition: transform 0.5s ease; /* Smooth rotation */
+    transition: transform 0.5s ease; /* Smooth transition */
 }
 
 /* Responsive Adjustments */
