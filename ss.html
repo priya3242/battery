@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Event Demonstration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+        }
+        .sensor {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: teal;
+        }
+        p {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Sensor Event Demonstration</h2>
+
+    <div class="sensor" id="devicemotion">DeviceMotionEvent: Waiting for data...</div>
+    <div class="sensor" id="deviceorientation">DeviceOrientationEvent: Waiting for data...</div>
+    <div class="sensor" id="deviceproximity">DeviceProximityEvent: (Deprecated) Waiting for data...</div>
+    <div class="sensor" id="userproximity">UserProximityEvent: (Deprecated) Waiting for data...</div>
+    <div class="sensor" id="ambientlight">AmbientLightSensor: Waiting for data...</div>
+    <div class="sensor" id="gyroscope">Gyroscope: Waiting for data...</div>
+    <div class="sensor" id="magnetometer">Magnetometer: Waiting for data...</div>
+    <div class="sensor" id="accelerometer">Accelerometer: Waiting for data...</div>
+    <div class="sensor" id="geolocation">Geolocation: Waiting for data...</div>
+    <div class="sensor" id="speechrecognition">SpeechRecognitionEvent: Waiting for speech input...</div>
+    <div class="sensor" id="touch">TouchEvent: Waiting for touch input...</div>
+    <div class="sensor" id="pointer">PointerEvent: Waiting for pointer input...</div>
+
+    <script>
+        // DeviceMotionEvent
+        window.addEventListener('devicemotion', (event) => {
+            document.getElementById('devicemotion').textContent = 
+                `Acceleration X: ${event.acceleration.x}, Y: ${event.acceleration.y}, Z: ${event.acceleration.z}`;
+        });
+
+        // DeviceOrientationEvent
+        window.addEventListener('deviceorientation', (event) => {
+            document.getElementById('deviceorientation').textContent = 
+                `Alpha: ${event.alpha}, Beta: ${event.beta}, Gamma: ${event.gamma}`;
+        });
+
+        // DeviceProximityEvent (Deprecated)
+        window.addEventListener('deviceproximity', (event) => {
+            document.getElementById('deviceproximity').textContent = 
+                `Distance: ${event.value} cm, Min: ${event.min}, Max: ${event.max}`;
+        });
+
+        // UserProximityEvent (Deprecated)
+        window.addEventListener('userproximity', (event) => {
+            document.getElementById('userproximity').textContent = 
+                `Near: ${event.near}`;
+        });
+
+        // AmbientLightSensor
+        if ('AmbientLightSensor' in window) {
+            const sensor = new AmbientLightSensor();
+            sensor.addEventListener('reading', () => {
+                document.getElementById('ambientlight').textContent = 
+                    `Illuminance: ${sensor.illuminance} lux`;
+            });
+            sensor.start();
+        } else {
+            document.getElementById('ambientlight').textContent = "AmbientLightSensor not supported on this device.";
+        }
+
+        // Gyroscope
+        if ('Gyroscope' in window) {
+            const gyroscope = new Gyroscope();
+            gyroscope.addEventListener('reading', () => {
+                document.getElementById('gyroscope').textContent = 
+                    `Gyroscope X: ${gyroscope.x}, Y: ${gyroscope.y}, Z: ${gyroscope.z}`;
+            });
+            gyroscope.start();
+        } else {
+            document.getElementById('gyroscope').textContent = "Gyroscope not supported on this device.";
+        }
+
+        // Magnetometer
+        if ('Magnetometer' in window) {
+            const magnetometer = new Magnetometer();
+            magnetometer.addEventListener('reading', () => {
+                document.getElementById('magnetometer').textContent = 
+                    `Magnetometer X: ${magnetometer.x}, Y: ${magnetometer.y}, Z: ${magnetometer.z}`;
+            });
+            magnetometer.start();
+        } else {
+            document.getElementById('magnetometer').textContent = "Magnetometer not supported on this device.";
+        }
+
+        // Accelerometer
+        if ('Accelerometer' in window) {
+            const accelerometer = new Accelerometer();
+            accelerometer.addEventListener('reading', () => {
+                document.getElementById('accelerometer').textContent = 
+                    `Accelerometer X: ${accelerometer.x}, Y: ${accelerometer.y}, Z: ${accelerometer.z}`;
+            });
+            accelerometer.start();
+        } else {
+            document.getElementById('accelerometer').textContent = "Accelerometer not supported on this device.";
+        }
+
+        // Geolocation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                document.getElementById('geolocation').textContent = 
+                    `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}, Accuracy: ${position.coords.accuracy}`;
+            });
+        } else {
+            document.getElementById('geolocation').textContent = "Geolocation not supported on this device.";
+        }
+
+        // SpeechRecognitionEvent
+        const recognition = new webkitSpeechRecognition();
+        recognition.onresult = (event) => {
+            document.getElementById('speechrecognition').textContent = 
+                `You said: ${event.results[0][0].transcript}`;
+        };
+        recognition.onerror = (event) => {
+            document.getElementById('speechrecognition').textContent = `Error occurred in speech recognition: ${event.error}`;
+        };
+        recognition.start();
+
+        // TouchEvent
+        window.addEventListener('touchstart', (event) => {
+            document.getElementById('touch').textContent = 
+                `Touch points: ${event.touches.length}`;
+        });
+
+        // PointerEvent
+        window.addEventListener('pointermove', (event) => {
+            document.getElementById('pointer').textContent = 
+                `Pointer type: ${event.pointerType}, X: ${event.clientX}, Y: ${event.clientY}`;
+        });
+    </script>
+</body>
+</html>
