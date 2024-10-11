@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #e6f4f1; /* Light cyan background color */
+            background-color: #e6f4f1;
         }
         .container {
             max-width: 800px;
@@ -20,11 +20,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #008080; /* Teal text color */
+            color: #008080;
             text-align: center;
         }
         h2 {
-            color: #007777; /* Slightly darker teal for subheadings */
+            color: #007777;
             margin-top: 20px;
         }
         p {
@@ -41,7 +41,7 @@
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #d0e8e3; /* Light cyan header background color */
+            background-color: #d0e8e3;
         }
         .sensor {
             background-color: #fff;
@@ -50,23 +50,15 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        /* Responsive Styling */
         @media only screen and (max-width: 600px) {
             .container {
                 padding: 10px;
             }
-            table {
-                width: 100%;
-            }
-            th, td {
+            table, th, td {
                 display: block;
                 width: 100%;
             }
-            th {
-                text-align: left;
-            }
-            td {
+            th, td {
                 text-align: left;
             }
         }
@@ -141,17 +133,17 @@
 
     <script>
         // Browser Information
-        document.getElementById('userAgent').textContent = navigator.userAgent;
-        document.getElementById('appVersion').textContent = navigator.appVersion;
-        document.getElementById('platform').textContent = navigator.platform;
-        document.getElementById('language').textContent = navigator.language || navigator.userLanguage;
+        document.getElementById('userAgent').textContent = navigator.userAgent || 'Not supported';
+        document.getElementById('appVersion').textContent = navigator.appVersion || 'Not supported';
+        document.getElementById('platform').textContent = navigator.platform || 'Not supported';
+        document.getElementById('language').textContent = navigator.language || 'Not supported';
         document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
 
         // Device Information
-        document.getElementById('screenWidth').textContent = `${screen.width} px`;
-        document.getElementById('screenHeight').textContent = `${screen.height} px`;
-        document.getElementById('availableWidth').textContent = `${window.screen.availWidth} px`;
-        document.getElementById('availableHeight').textContent = `${window.screen.availHeight} px`;
+        document.getElementById('screenWidth').textContent = `${screen.width} px` || 'Not supported';
+        document.getElementById('screenHeight').textContent = `${screen.height} px` || 'Not supported';
+        document.getElementById('availableWidth').textContent = `${window.screen.availWidth} px` || 'Not supported';
+        document.getElementById('availableHeight').textContent = `${window.screen.availHeight} px` || 'Not supported';
         document.getElementById('screenOrientation').textContent = screen.orientation ? screen.orientation.type : 'Not supported';
 
         // Battery Information
@@ -160,6 +152,8 @@
                 document.getElementById('charging').textContent = battery.charging ? 'Yes' : 'No';
                 document.getElementById('batteryLevel').textContent = (battery.level * 100).toFixed(0) + '%';
                 document.getElementById('dischargingTime').textContent = battery.dischargingTime === Infinity ? 'N/A' : (battery.dischargingTime / 60).toFixed(2) + ' minutes';
+            }).catch(() => {
+                document.getElementById('charging').textContent = 'Error fetching battery information';
             });
         } else {
             document.getElementById('charging').textContent = 'Battery API not supported.';
@@ -169,85 +163,47 @@
 
         // Network Information
         if (navigator.connection) {
-            document.getElementById('networkType').textContent = navigator.connection.effectiveType;
-            document.getElementById('downlinkSpeed').textContent = navigator.connection.downlink + ' Mbps';
-            document.getElementById('latency').textContent = navigator.connection.rtt + ' ms';
+            document.getElementById('networkType').textContent = navigator.connection.effectiveType || 'Unknown';
+            document.getElementById('downlinkSpeed').textContent = navigator.connection.downlink + ' Mbps' || 'Unknown';
+            document.getElementById('latency').textContent = navigator.connection.rtt + ' ms' || 'Unknown';
         } else {
-            document.getElementById('networkType').textContent = 'Network Information API not supported.';
-            document.getElementById('downlinkSpeed').textContent = 'Network Information API not supported.';
-            document.getElementById('latency').textContent = 'Network Information API not supported.';
+            document.getElementById('networkType').textContent = 'Network API not supported.';
+            document.getElementById('downlinkSpeed').textContent = 'Network API not supported.';
+            document.getElementById('latency').textContent = 'Network API not supported.';
         }
 
         // Device Memory
-        if ('deviceMemory' in navigator) {
-            document.getElementById('deviceMemory').textContent = navigator.deviceMemory + ' GB';
-        } else {
-            document.getElementById('deviceMemory').textContent = 'Device Memory API not supported.';
-        }
+        document.getElementById('deviceMemory').textContent = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Not supported';
 
         // CPU Cores
-        if (navigator.hardwareConcurrency) {
-            document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency;
-        } else {
-            document.getElementById('cpuCores').textContent = 'CPU Cores API not supported.';
-        }
+        document.getElementById('cpuCores').textContent = navigator.hardwareConcurrency || 'Not supported';
 
         // Performance Metrics
-        let performanceTiming = window.performance.timing;
-        document.getElementById('pageLoadTime').textContent = (performanceTiming.loadEventEnd - performanceTiming.navigationStart) + ' ms';
-        setInterval(() => {
-            document.getElementById('timeSincePageLoad').textContent = Math.round(performance.now()) + ' ms';
-        }, 1000);
+        window.addEventListener('load', function() {
+            const loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
+            document.getElementById('pageLoadTime').textContent = loadTime + ' ms';
+            document.getElementById('timeSincePageLoad').textContent = window.performance.now().toFixed(2) + ' ms';
+        });
 
-        // IP Details (example using a public API)
-        async function fetchIPDetails() {
-            try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                document.getElementById('ipAddress').textContent = data.ip;
-                document.getElementById('simOperator').textContent = data.org;
-                document.getElementById('country').textContent = data.country_name;
-                document.getElementById('region').textContent = data.region;
-                document.getElementById('ispName').textContent = data.isp;
-                document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
-                document.getElementById('currency').textContent = data.currency;
-            } catch (error) {
-                console.error('Error fetching IP details:', error);
-            }
+        // IP Information and Geolocation (requires external service)
+        // Call an IP geolocation API for fetching these details
+
+        // Sensor data handling (motion, orientation, etc.)
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', function(event) {
+                document.getElementById('acceleration').textContent = `X: ${event.acceleration.x.toFixed(2)}, Y: ${event.acceleration.y.toFixed(2)}, Z: ${event.acceleration.z.toFixed(2)}`;
+            });
+        } else {
+            document.getElementById('acceleration').textContent = 'DeviceMotionEvent not supported.';
         }
-        fetchIPDetails();
 
-        // Sensor Events
-        window.addEventListener('devicemotion', function(event) {
-            document.getElementById('acceleration').textContent = `x: ${event.acceleration.x.toFixed(2)}, y: ${event.acceleration.y.toFixed(2)}, z: ${event.acceleration.z.toFixed(2)}`;
-        });
-
-        window.addEventListener('deviceorientation', function(event) {
-            document.getElementById('rotation').textContent = `alpha: ${event.alpha.toFixed(2)}, beta: ${event.beta.toFixed(2)}, gamma: ${event.gamma.toFixed(2)}`;
-        });
-
-        // Deprecated sensors
-        window.addEventListener('deviceproximity', function(event) {
-            document.getElementById('deviceproximity').textContent = `Distance: ${event.value} cm`;
-        });
-
-        window.addEventListener('userproximity', function(event) {
-            document.getElementById('userproximity').textContent = `User is ${event.near ? 'near' : 'far'}`;
-        });
-
-        window.addEventListener('ambientlight', function(event) {
-            document.getElementById('ambientlight').textContent = `Light Level: ${event.value} lux`;
-        });
-
-        // Get Device Name
-        document.getElementById('deviceName').textContent = navigator.userAgent.includes("Mobile") ? "Mobile Device" : "Desktop Device";
-
-        // Orientation Data
-        window.addEventListener('deviceorientation', (event) => {
-            document.getElementById('direction').textContent = `${event.alpha.toFixed(2)}°`;
-            document.getElementById('tiltFrontBack').textContent = `${event.beta.toFixed(2)}°`;
-            document.getElementById('tiltLeftRight').textContent = `${event.gamma.toFixed(2)}°`;
-        });
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                document.getElementById('rotation').textContent = `Alpha: ${event.alpha.toFixed(2)}, Beta: ${event.beta.toFixed(2)}, Gamma: ${event.gamma.toFixed(2)}`;
+            });
+        } else {
+            document.getElementById('rotation').textContent = 'DeviceOrientationEvent not supported.';
+        }
     </script>
 </body>
 </html>
