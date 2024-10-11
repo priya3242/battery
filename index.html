@@ -4,36 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Device Info</title>
+    <title>Device Orientation Detection</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS -->
 </head>
 <body>
     <div class="container">
-        <h1>Device Information</h1>
+        <h1>Device Orientation Detection</h1>
 
         <!-- Tabular structure for device details -->
         <table class="device-table">
             <tbody id="device-info">
-                <!-- Device info will be dynamically inserted here -->
+                <tr>
+                    <th>Rotation X (β)</th>
+                    <td id="rotation-x">0.00</td>
+                </tr>
+                <tr>
+                    <th>Rotation Y (γ)</th>
+                    <td id="rotation-y">0.00</td>
+                </tr>
+                <tr>
+                    <th>Rotation Z (α)</th>
+                    <td id="rotation-z">0.00</td>
+                </tr>
+                <tr>
+                    <th>Total Acceleration</th>
+                    <td id="acceleration">0.00</td>
+                </tr>
             </tbody>
         </table>
 
-        <!-- Phone Orientation Section -->
-        <h2 class="gold-heading">Phone Orientation</h2>
-        <div id="orientation-details">
-            <p><strong>Alpha:</strong> <span id="alpha">0</span>°</p>
-            <p><strong>Beta (Tilt Front-Back):</strong> <span id="beta">0</span>°</p>
-            <p><strong>Gamma (Tilt Left-Right):</strong> <span id="gamma">0</span>°</p>
-            <p><strong>Acceleration:</strong> <span id="acceleration">0</span></p>
-        </div>
-
-        <!-- Phone Animation -->
-        <div class="phone-animation">
-            <img id="phone-icon" src="https://example.com/portrait-phone.png" alt="Portrait Phone" />
-        </div>
+        <h2 style="color: #ffd700; text-align: center;">Phone Orientation</h2>
+        <img id="phone-icon" src="https://via.placeholder.com/150/FFD700/000000?text=Portrait" alt="Phone Icon" class="phone-icon">
     </div>
 
-    <script src="deviceinfo.js"></script> <!-- The JS file to handle device info fetching -->
-    <script src="orientation.js"></script> <!-- New JS file for phone orientation -->
+    <script src="orientation.js"></script> <!-- The JS file to handle orientation -->
 </body>
 </html>
