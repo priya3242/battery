@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Info (Hybrid Approach)</title>
+    <title>Accurate Device Info (With UA-CH)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
     </style>
 </head>
 <body>
-    <h1>Device Information (Hybrid Approach)</h1>
+    <h1>Device Information (With UA-CH Support)</h1>
 
     <div class="info-box">
         <h2>Browser Info:</h2>
@@ -40,40 +40,40 @@
         <p id="ip-info"></p>
     </div>
 
-    <!-- Include UAParser.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ua-parser-js/0.7.31/ua-parser.min.js"></script>
-    
     <script>
-        // Function to detect device and browser information using native JavaScript APIs
+        // Function to fetch device information using User-Agent Client Hints (UA-CH)
+        function fetchUserAgentClientHints() {
+            if ('userAgentData' in navigator) {
+                const uaData = navigator.userAgentData;
+
+                // Get the high-entropy hints for detailed device info
+                uaData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model'])
+                    .then(uaHints => {
+                        const platform = uaHints.platform || 'Unknown';
+                        const platformVersion = uaHints.platformVersion || 'Unknown';
+                        const architecture = uaHints.architecture || 'Unknown';
+                        const model = uaHints.model || 'Unknown';  // Here you get the real device model
+                        
+                        document.getElementById('device-info').innerText = `Platform: ${platform}, Version: ${platformVersion}, Architecture: ${architecture}, Model: ${model}`;
+                    })
+                    .catch(err => {
+                        console.error('Error fetching UA-CH data:', err);
+                        fallbackDeviceInfo();
+                    });
+            } else {
+                // Fallback if UA-CH is not supported
+                fallbackDeviceInfo();
+            }
+        }
+
+        // Fallback function to detect device and browser information using traditional User-Agent string
         function fallbackDeviceInfo() {
             const userAgent = navigator.userAgent || 'Unknown';
             const platform = navigator.platform || 'Unknown';
-            const browser = navigator.userAgentData ? navigator.userAgentData.brands[0].brand : userAgent;
             
-            // Fallback info
+            // Display fallback info if UA-CH is not available
             document.getElementById('browser-info').innerText = `User Agent: ${userAgent}`;
             document.getElementById('device-info').innerText = `Platform: ${platform}`;
-            document.getElementById('os-info').innerText = `OS: ${navigator.platform}`;
-        }
-
-        // Main function that tries to use UAParser.js first, and falls back to native APIs if not supported
-        function detectDeviceInfo() {
-            try {
-                // Try to use UAParser.js for detailed info
-                const parser = new UAParser();
-                const browser = parser.getBrowser();
-                const device = parser.getDevice();
-                const os = parser.getOS();
-
-                // Display info from UAParser.js if successful
-                document.getElementById('browser-info').innerText = `Browser Name: ${browser.name}, Version: ${browser.version}`;
-                document.getElementById('device-info').innerText = `Device: ${device.vendor || 'Unknown'}, Model: ${device.model || 'Unknown'}, Type: ${device.type || 'Unknown'}`;
-                document.getElementById('os-info').innerText = `Operating System: ${os.name}, Version: ${os.version}`;
-            } catch (error) {
-                console.error('UAParser.js failed or not supported, falling back to native APIs:', error);
-                // Fallback to native JavaScript if third-party API fails
-                fallbackDeviceInfo();
-            }
         }
 
         // Fetch IP Address and Location Information
@@ -97,8 +97,8 @@
         }
 
         // Call the functions to detect info on page load
-        detectDeviceInfo();
-        fetchIPInfo();
+        fetchUserAgentClientHints();  // Attempt to get advanced device info using UA-CH
+        fetchIPInfo();  // Fetch IP and geolocation info
     </script>
 </body>
 </html>
