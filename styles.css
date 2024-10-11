@@ -6,76 +6,85 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #111; /* Black background for a premium look */
+    color: #fff;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    overflow: hidden;
+    animation: backgroundFade 2s ease-in-out;
 }
 
 .container {
-    background-color: #fff;
+    background-color: #1b1b1b; /* Dark background for the container */
     border-radius: 10px;
-    padding: 20px;
+    padding: 30px;
     max-width: 1200px;
     width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Shadow for premium effect */
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 /* Header Styles */
 h1, h2 {
-    color: #2c3e50;
+    color: #f1c40f; /* Gold text for headers */
     margin-bottom: 20px;
     text-align: center;
+    animation: textFade 2s ease-in-out;
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin-top: 30px;
 }
 
 /* Device Info Section */
 .device-info, .battery-info, .cpu-info, .memory-info, .network-info {
-    margin-bottom: 30px;
-    background-color: #ecf0f1;
+    background-color: #2c2c2c; /* Slightly lighter dark background */
     border-radius: 8px;
     padding: 20px;
+    margin-bottom: 30px;
+    color: #fff;
+    opacity: 0;
+    animation: fadeInUp 1.5s ease-in-out forwards;
+    animation-delay: 0.3s;
 }
 
-/* General Font Style */
-strong {
-    color: #2980b9;
+/* Table-Like Structure */
+.device-info table,
+.battery-info table,
+.cpu-info table,
+.memory-info table,
+.network-info table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-span {
-    color: #7f8c8d;
+table {
+    width: 100%;
 }
 
-/* CSS Grid Layout */
-.device-info,
-.battery-info,
-.cpu-info,
-.memory-info,
-.network-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Creates two equal columns */
-    gap: 15px; /* Spacing between grid items */
-    align-items: center;
+th, td {
+    padding: 15px;
+    text-align: left;
+    font-size: 1.2rem;
 }
 
-.device-info span,
-.battery-info span,
-.cpu-info span,
-.memory-info span,
-.network-info span {
-    font-size: 1.1rem;
+th {
+    color: #f1c40f; /* Gold for table headers */
+    border-bottom: 2px solid #7f8c8d; /* Silver line separator */
+}
+
+td {
+    color: #bdc3c7; /* Silver/Light grey for table content */
+    border-bottom: 1px solid #444; /* Thin silver line for content */
 }
 
 /* Responsive Design for Medium and Large Screens */
@@ -85,30 +94,137 @@ span {
     }
 
     h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     h2 {
-        font-size: 1.75rem;
+        font-size: 2rem;
     }
 
-    .device-info,
-    .battery-info,
-    .cpu-info,
-    .memory-info,
-    .network-info {
-        grid-template-columns: repeat(4, 1fr); /* Four columns on larger screens */
+    table {
+        font-size: 1.3rem;
     }
 }
 
-/* Even better spacing on larger screens */
+/* Premium Colors */
+.gold {
+    color: #f1c40f; /* Gold text */
+}
+
+.silver {
+    color: #bdc3c7; /* Silver text */
+}
+
+.black {
+    color: #2c3e50; /* Black text */
+}
+
+/* Section-Specific Colors */
+.device-info {
+    border: 2px solid #f1c40f; /* Gold border for Device Info */
+}
+
+.battery-info {
+    border: 2px solid #bdc3c7; /* Silver border for Battery Info */
+}
+
+.cpu-info {
+    border: 2px solid #7f8c8d; /* Silver border for CPU Info */
+}
+
+.memory-info {
+    border: 2px solid #f1c40f; /* Gold border for Memory Info */
+}
+
+.network-info {
+    border: 2px solid #bdc3c7; /* Silver border for Network Info */
+}
+
+/* Hover Effects */
+.device-info:hover, .battery-info:hover, .cpu-info:hover, .memory-info:hover, .network-info:hover {
+    background-color: #333;
+    transition: background-color 0.3s ease;
+}
+
+/* Additional Spacing for Larger Screens */
 @media (min-width: 1024px) {
-    .device-info,
-    .battery-info,
-    .cpu-info,
-    .memory-info,
-    .network-info {
-        grid-template-columns: repeat(6, 1fr); /* 6 columns on very large screens */
-        gap: 20px;
+    table {
+        font-size: 1.5rem;
     }
+}
+
+/* Fade In Animation for sections */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Text Fade-In Effect */
+@keyframes textFade {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Background Fade-In */
+@keyframes backgroundFade {
+    from {
+        background-color: #000;
+    }
+    to {
+        background-color: #111;
+    }
+}
+
+/* Fade-in for table content */
+.device-info td, .battery-info td, .cpu-info td, .memory-info td, .network-info td {
+    opacity: 0;
+    animation: fadeInTableContent 1s ease-in-out forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeInTableContent {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Button or Interactive Element Animation */
+button {
+    background-color: #f1c40f; /* Gold button */
+    color: #111;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #fff;
+    color: #111;
+    transform: scale(1.05);
 }
