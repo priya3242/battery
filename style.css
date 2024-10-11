@@ -1,50 +1,81 @@
+/* Basic Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #0D0D0D;
-    color: #FFF;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    background-color: #111; /* Black background */
+    color: #fff; /* White text */
 }
 
 .container {
-    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    background: linear-gradient(145deg, #0D0D0D, #1A1A1A);
-    border-radius: 10px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
-    max-width: 500px;
-    width: 100%;
 }
 
-.animated-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    background: linear-gradient(145deg, #E63946, #F4A261, #2A9D8F, #E9C46A);
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: titleAnimation 3s infinite;
+/* Premium Color Scheme */
+h1, h2 {
+    color: #ffd700; /* Gold */
+    text-align: center;
 }
 
-@keyframes titleAnimation {
-    0% { filter: hue-rotate(0deg); }
-    100% { filter: hue-rotate(360deg); }
+/* Double Column Layout */
+.double-column {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: 20px; /* Space between the columns */
 }
 
+.column {
+    background-color: #000; /* Black background for each column */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+}
+
+.column:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); /* Gold shadow */
+}
+
+/* Info Section in Each Column */
 .device-details {
-    margin-top: 20px;
+    font-size: 0.9em; /* Smaller text to fit within the columns */
 }
 
-.detail-item {
-    margin: 10px 0;
-    font-size: 1.2rem;
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .double-column {
+        grid-template-columns: 1fr; /* Single column layout on smaller screens */
+    }
+
+    .container {
+        padding: 10px;
+    }
 }
 
-.label {
-    font-weight: bold;
-    color: #E63946; /* Red for label emphasis */
+@media screen and (max-width: 480px) {
+    .column {
+        padding: 10px;
+        font-size: 0.85em; /* Adjust font size for small screens */
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+}
+
+/* Animations */
+h1 {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
