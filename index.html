@@ -9,31 +9,106 @@
 <body>
     <div class="container">
         <h1>Your Device Information</h1>
-        <div id="device-info" class="device-info">
-            Fetching device info...
+
+        <!-- Device Information Section -->
+        <div class="device-info">
+            <h2>Device Information</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Platform:</th>
+                        <td id="platform">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Platform Version:</th>
+                        <td id="platformVersion">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Architecture:</th>
+                        <td id="architecture">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Model:</th>
+                        <td id="model">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Browser Version:</th>
+                        <td id="browserVersion">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Mobile:</th>
+                        <td id="isMobile">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Brands:</th>
+                        <td id="brands">Fetching...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <h2>Battery Information</h2>
+        <!-- Battery Information Section -->
         <div class="battery-info">
-            <strong>Battery Charging:</strong> <span id="batteryCharging">Fetching...</span><br>
-            <strong>Battery Level:</strong> <span id="batteryLevel">Fetching...</span>
+            <h2>Battery Information</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Battery Charging:</th>
+                        <td id="batteryCharging">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Battery Level:</th>
+                        <td id="batteryLevel">Fetching...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <h2>CPU Information</h2>
+        <!-- CPU Information Section -->
         <div class="cpu-info">
-            <strong>CPU Cores:</strong> <span id="cpuCores">Fetching...</span>
+            <h2>CPU Information</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>CPU Cores:</th>
+                        <td id="cpuCores">Fetching...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <h2>Memory Information</h2>
+        <!-- Memory Information Section -->
         <div class="memory-info">
-            <strong>Device Memory:</strong> <span id="deviceMemory">Fetching...</span>
+            <h2>Memory Information</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Device Memory:</th>
+                        <td id="deviceMemory">Fetching...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <h2>Network Information</h2>
+        <!-- Network Information Section -->
         <div class="network-info">
-            <strong>Network Type:</strong> <span id="networkType">Fetching...</span><br>
-            <strong>Downlink Speed:</strong> <span id="downlinkSpeed">Fetching...</span><br>
-            <strong>Latency:</strong> <span id="latency">Fetching...</span>
+            <h2>Network Information</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Network Type:</th>
+                        <td id="networkType">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Downlink Speed:</th>
+                        <td id="downlinkSpeed">Fetching...</td>
+                    </tr>
+                    <tr>
+                        <th>Latency:</th>
+                        <td id="latency">Fetching...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -49,16 +124,14 @@
             // Device Info
             const deviceInfoInstance = new DeviceInfo();
             deviceInfoInstance.fetchDeviceInfo(function(info) {
-                const deviceInfoElement = document.getElementById('device-info');
-                deviceInfoElement.innerHTML = `
-                    <strong>Platform:</strong> ${info.platform}<br>
-                    <strong>Platform Version:</strong> ${info.platformVersion}<br>
-                    <strong>Architecture:</strong> ${info.architecture}<br>
-                    <strong>Model:</strong> ${info.model}<br>
-                    <strong>Browser Version:</strong> ${info.browserVersion}<br>
-                    <strong>Mobile:</strong> ${info.isMobile ? 'Yes' : 'No'}<br>
-                    <strong>Brands:</strong> ${info.brands}
-                `;
+                // Populate the table cells with the fetched information
+                document.getElementById('platform').textContent = info.platform || 'N/A';
+                document.getElementById('platformVersion').textContent = info.platformVersion || 'N/A';
+                document.getElementById('architecture').textContent = info.architecture || 'N/A';
+                document.getElementById('model').textContent = info.model || 'N/A';
+                document.getElementById('browserVersion').textContent = info.browserVersion || 'N/A';
+                document.getElementById('isMobile').textContent = info.isMobile ? 'Yes' : 'No';
+                document.getElementById('brands').textContent = info.brands || 'N/A';
             });
 
             // Battery Info
