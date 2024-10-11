@@ -17,9 +17,23 @@
                 <!-- Device info will be dynamically inserted here -->
             </tbody>
         </table>
+
+        <!-- Phone Orientation Section -->
+        <h2 class="gold-heading">Phone Orientation</h2>
+        <div id="orientation-details">
+            <p><strong>Alpha:</strong> <span id="alpha">0</span>°</p>
+            <p><strong>Beta (Tilt Front-Back):</strong> <span id="beta">0</span>°</p>
+            <p><strong>Gamma (Tilt Left-Right):</strong> <span id="gamma">0</span>°</p>
+            <p><strong>Acceleration:</strong> <span id="acceleration">0</span></p>
+        </div>
+
+        <!-- 3D Phone Icon that rotates based on orientation -->
+        <div class="phone-animation">
+            <img id="phone-icon" src="https://via.placeholder.com/150/FFD700/000000?text=Phone" alt="3D Phone" />
+        </div>
     </div>
 
     <script src="deviceinfo.js"></script> <!-- The JS file to handle device info fetching -->
-    <script src="script.js"></script> <!-- The script to handle dynamic DOM insertion -->
+    <script src="orientation.js"></script> <!-- New JS file for phone orientation -->
 </body>
 </html>
