@@ -186,6 +186,42 @@
         });
 
         // IP Information and Geolocation (requires external service)
+        // Hide the IP details section initially
+document.getElementById('ip-details-section').style.display = 'none';
+
+// Fetch the user's public IP address
+fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+        const userIp = data.ip;
+        document.getElementById('ipAddress').textContent = userIp;
+
+        // Fetch IP details from ipinfo.io based on the IP address
+        return fetch(`https://ipinfo.io/${userIp}/json`);
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Show the IP details section if IP details are fetched successfully
+        document.getElementById('ip-details-section').style.display = 'block';
+
+        // Populate the fields with available data, or fallback to 'N/A'
+        document.getElementById('simOperator').textContent = data.org || 'N/A';
+        document.getElementById('country').textContent = data.country || 'N/A';
+        document.getElementById('region').textContent = data.region || 'N/A';
+        document.getElementById('ispName').textContent = data.hostname || 'N/A';
+        document.getElementById('isMobile').textContent = data.mobile ? 'Yes' : 'No';
+        
+        // `currency` is not provided by ipinfo.io, so it's omitted
+        document.getElementById('currency').textContent = 'Not Available'; 
+    })
+    .catch(error => {
+        console.error('Error fetching IP or details:', error);
+
+        // Handle any error in fetching IP or details
+        document.getElementById('ipAddress').textContent = 'Error fetching IP';
+        document.getElementById('simOperator').textContent = 'Error fetching details';
+    });
+
         // Call an IP geolocation API for fetching these details
 
         // Sensor data handling (motion, orientation, etc.)
