@@ -1,0 +1,50 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #0D0D0D;
+    color: #FFF;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(145deg, #0D0D0D, #1A1A1A);
+    border-radius: 10px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 100%;
+}
+
+.animated-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    background: linear-gradient(145deg, #E63946, #F4A261, #2A9D8F, #E9C46A);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: titleAnimation 3s infinite;
+}
+
+@keyframes titleAnimation {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.device-details {
+    margin-top: 20px;
+}
+
+.detail-item {
+    margin: 10px 0;
+    font-size: 1.2rem;
+}
+
+.label {
+    font-weight: bold;
+    color: #E63946; /* Red for label emphasis */
+}
