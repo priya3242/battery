@@ -4,155 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Device Info</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Your Device Information</h1>
-
-        <!-- Device Information Section -->
-        <div class="device-info">
-            <h2>Device Information</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Platform:</th>
-                        <td id="platform">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Platform Version:</th>
-                        <td id="platformVersion">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Architecture:</th>
-                        <td id="architecture">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Model:</th>
-                        <td id="model">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Browser Version:</th>
-                        <td id="browserVersion">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Mobile:</th>
-                        <td id="isMobile">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Brands:</th>
-                        <td id="brands">Fetching...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Battery Information Section -->
-        <div class="battery-info">
-            <h2>Battery Information</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Battery Charging:</th>
-                        <td id="batteryCharging">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Battery Level:</th>
-                        <td id="batteryLevel">Fetching...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- CPU Information Section -->
-        <div class="cpu-info">
-            <h2>CPU Information</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>CPU Cores:</th>
-                        <td id="cpuCores">Fetching...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Memory Information Section -->
-        <div class="memory-info">
-            <h2>Memory Information</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Device Memory:</th>
-                        <td id="deviceMemory">Fetching...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Network Information Section -->
-        <div class="network-info">
-            <h2>Network Information</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Network Type:</th>
-                        <td id="networkType">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Downlink Speed:</th>
-                        <td id="downlinkSpeed">Fetching...</td>
-                    </tr>
-                    <tr>
-                        <th>Latency:</th>
-                        <td id="latency">Fetching...</td>
-                    </tr>
-                </tbody>
-            </table>
+        <h1 class="animated-title">Device Information</h1>
+        <div class="device-details">
+            <div class="detail-item">
+                <span class="label">Platform:</span> <span id="platform">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Platform Version:</span> <span id="platformVersion">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Architecture:</span> <span id="architecture">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Model:</span> <span id="model">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Browser Version:</span> <span id="browserVersion">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Mobile Device:</span> <span id="isMobile">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Brands:</span> <span id="brands">Loading...</span>
+            </div>
         </div>
     </div>
-
-    <!-- Include the JavaScript files -->
-    <script src="deviceinfo.js" type="module"></script>
-    <script src="batteryinfo.js" type="module"></script>
-    <script src="cpuinfo.js" type="module"></script>
-    <script src="memoryinfo.js" type="module"></script>
-    <script src="networkinfo.js" type="module"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            const deviceInfoInstance = new DeviceInfo();
-
-            // Fetch device information
-            try {
-                const info = await deviceInfoInstance.fetchDeviceInfo();
-                document.getElementById('platform').innerText = info.platform || 'Unknown';
-                document.getElementById('platformVersion').innerText = info.platformVersion || 'Unknown';
-                document.getElementById('architecture').innerText = info.architecture || 'Unknown';
-                document.getElementById('model').innerText = info.model || 'Unknown';
-                document.getElementById('browserVersion').innerText = info.browserVersion || 'Unknown';
-                document.getElementById('isMobile').innerText = info.isMobile ? 'Yes' : 'No';
-                document.getElementById('brands').innerText = info.brands || 'Unknown';
-            } catch (error) {
-                console.error("Error fetching device info:", error);
-            }
-
-            // Fetch additional information
-            try {
-                const batteryModule = await import('./batteryinfo.js');
-                batteryModule.getBatteryInfo();
-
-                const cpuModule = await import('./cpuinfo.js');
-                cpuModule.getCpuCores();
-
-                const memoryModule = await import('./memoryinfo.js');
-                memoryModule.getDeviceMemory();
-
-                const networkModule = await import('./networkinfo.js');
-                networkModule.getNetworkInfo();
-            } catch (error) {
-                console.error("Error fetching additional info:", error);
-            }
-        });
-    </script>
+    <script src="deviceinfo.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
