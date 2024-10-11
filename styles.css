@@ -1,159 +1,123 @@
-/* General Reset */
-* {
+/* Basic Styles */
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #111; /* Black background for a premium look */
+    font-family: 'Arial', sans-serif;
+    background-color: #111;
     color: #fff;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-    animation: backgroundFade 2s ease-in-out;
 }
 
 .container {
-    background-color: #1b1b1b; /* Dark background for the container */
-    border-radius: 10px;
-    padding: 30px;
     max-width: 1200px;
-    width: 100%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Shadow for premium effect */
-    animation: fadeIn 1.5s ease-in-out;
-}
-
-/* Header Styles */
-h1, h2 {
-    color: #f1c40f; /* Gold text for headers */
-    margin-bottom: 20px;
-    text-align: center;
-    animation: textFade 2s ease-in-out;
-}
-
-h1 {
-    font-size: 2.5rem;
-}
-
-h2 {
-    font-size: 1.75rem;
-    margin-top: 30px;
-}
-
-/* Device Info Section */
-.device-info, .battery-info, .cpu-info, .memory-info, .network-info {
-    background-color: #2c2c2c; /* Slightly lighter dark background */
-    border-radius: 8px;
+    margin: 0 auto;
     padding: 20px;
-    margin-bottom: 30px;
-    color: #fff;
-    opacity: 0;
-    animation: fadeInUp 1.5s ease-in-out forwards;
-    animation-delay: 0.3s;
 }
 
-/* Table-Like Structure */
-.device-info table,
-.battery-info table,
-.cpu-info table,
-.memory-info table,
-.network-info table {
-    width: 100%;
-    border-collapse: collapse;
+/* Premium Color Scheme */
+h1, h2 {
+    color: #ffd700; /* Gold */
+    text-align: center;
 }
 
 table {
     width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
 th, td {
-    padding: 15px;
+    padding: 10px;
+    border: 1px solid #333;
     text-align: left;
-    font-size: 1.2rem;
 }
 
 th {
-    color: #f1c40f; /* Gold for table headers */
-    border-bottom: 2px solid #7f8c8d; /* Silver line separator */
+    background-color: #333; /* Dark background for header */
+    color: #fff;
 }
 
 td {
-    color: #bdc3c7; /* Silver/Light grey for table content */
-    border-bottom: 1px solid #444; /* Thin silver line for content */
+    background-color: #222; /* Darker background for data */
+    color: #dcdcdc; /* Silver text */
 }
 
-/* Responsive Design for Medium and Large Screens */
-@media (min-width: 768px) {
-    .container {
-        padding: 40px;
+/* Info Section */
+.info-section {
+    margin-bottom: 40px;
+    background: #000;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 90%;
     }
 
     h1 {
-        font-size: 3rem;
+        font-size: 1.5em;
+    }
+
+    table, th, td {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: right;
+    }
+
+    th::after {
+        content: ':';
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 85%;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+
+    th, td {
+        padding: 5px;
+        font-size: 0.85em;
+    }
+
+    /* Single column layout on mobile */
+    .container {
+        padding: 10px;
+    }
+
+    .info-section {
+        padding: 10px;
     }
 
     h2 {
-        font-size: 2rem;
-    }
-
-    table {
-        font-size: 1.3rem;
+        font-size: 1.2em;
     }
 }
 
-/* Premium Colors */
-.gold {
-    color: #f1c40f; /* Gold text */
+/* Hover & Animations */
+.info-section {
+    transition: all 0.3s ease-in-out;
 }
 
-.silver {
-    color: #bdc3c7; /* Silver text */
+.info-section:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); /* Gold shadow */
 }
 
-.black {
-    color: #2c3e50; /* Black text */
+h1 {
+    animation: fadeIn 1s ease-in-out;
 }
 
-/* Section-Specific Colors */
-.device-info {
-    border: 2px solid #f1c40f; /* Gold border for Device Info */
-}
-
-.battery-info {
-    border: 2px solid #bdc3c7; /* Silver border for Battery Info */
-}
-
-.cpu-info {
-    border: 2px solid #7f8c8d; /* Silver border for CPU Info */
-}
-
-.memory-info {
-    border: 2px solid #f1c40f; /* Gold border for Memory Info */
-}
-
-.network-info {
-    border: 2px solid #bdc3c7; /* Silver border for Network Info */
-}
-
-/* Hover Effects */
-.device-info:hover, .battery-info:hover, .cpu-info:hover, .memory-info:hover, .network-info:hover {
-    background-color: #333;
-    transition: background-color 0.3s ease;
-}
-
-/* Additional Spacing for Larger Screens */
-@media (min-width: 1024px) {
-    table {
-        font-size: 1.5rem;
-    }
-}
-
-/* Fade In Animation for sections */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -161,70 +125,4 @@ td {
     to {
         opacity: 1;
     }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Text Fade-In Effect */
-@keyframes textFade {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Background Fade-In */
-@keyframes backgroundFade {
-    from {
-        background-color: #000;
-    }
-    to {
-        background-color: #111;
-    }
-}
-
-/* Fade-in for table content */
-.device-info td, .battery-info td, .cpu-info td, .memory-info td, .network-info td {
-    opacity: 0;
-    animation: fadeInTableContent 1s ease-in-out forwards;
-    animation-delay: 0.5s;
-}
-
-@keyframes fadeInTableContent {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Button or Interactive Element Animation */
-button {
-    background-color: #f1c40f; /* Gold button */
-    color: #111;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #fff;
-    color: #111;
-    transform: scale(1.05);
 }
